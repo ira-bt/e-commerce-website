@@ -1,6 +1,6 @@
 //Purpose: The ONLY place touching localStorage
 
-export const storageService = {
+const storageService = {
   get(key) {
     try {
       const data = localStorage.getItem(key);
@@ -22,3 +22,5 @@ export const storageService = {
     localStorage.clear();
   },
 };
+
+export default storageService;

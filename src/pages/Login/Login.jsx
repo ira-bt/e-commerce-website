@@ -4,6 +4,7 @@ import { loginApi } from "../../services/auth.service";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../utils/routes";
+import InputField from "../../components/form/InputField";
 
 const validationSchema = Yup.object({
   username: Yup.string().required("Username required"),
@@ -32,7 +33,7 @@ export default function Login() {
           username: values.username,
           token,
         });
-        navigate(ROUTES.HOME, {replace: true});
+        navigate(ROUTES.HOME);
       } catch (error) {
         setStatus("Invalid username or password");
       } finally {
@@ -42,30 +43,35 @@ export default function Login() {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={formik.handleSubmit} className="auth-form">
       <h2>Login</h2>
 
-      <input
+      <InputField
+        label="Username"
         name="username"
-        placeholder="Username"
         value={formik.values.username}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
+        error={formik.errors.username}
+        touched={formik.touched.username}
+        placeholder="Enter username"
       />
-      {formik.touched.username && formik.errors.username && (<p>{formik.errors.username}</p>)}
 
-      <input
-        type="password"
+      <InputField
+        label="Password"
         name="password"
-        placeholder="Password"
+        type="password"
         value={formik.values.password}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
+        error={formik.errors.password}
+        touched={formik.touched.password}
+        placeholder="Enter password"
       />
-      {formik.touched.password && formik.errors.password && (<p>{formik.errors.password}</p>)}
 
-      {formik.status && <p>{formik.status}</p>}
-
+      {formik.status && (
+        <p className="form-error">{formik.status}</p>
+      )}
       <button type="submit" disabled={formik.isSubmitting}>
         {formik.isSubmitting ? "Logging in..." : "Login"}
       </button>

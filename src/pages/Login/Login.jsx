@@ -2,6 +2,9 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { loginApi } from "../../services/auth.service";
 import { useAuth } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../utils/routes";
+import InputField from "../../components/form/InputField";
 
 const validationSchema = Yup.object({
   username: Yup.string().required("Username required"),
@@ -10,6 +13,7 @@ const validationSchema = Yup.object({
 
 export default function Login() {
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -21,12 +25,17 @@ export default function Login() {
       try {
         const { token } = await loginApi(values);
 
+        /**
+         * FakeStore returns only token
+         * We build user object ourselves
+         */
         login({
           username: values.username,
           token,
         });
+        navigate(ROUTES.HOME);
       } catch (error) {
-        setStatus("Invalid credentials");
+        setStatus("Invalid username or password");
       } finally {
         setSubmitting(false);
       }
@@ -34,28 +43,37 @@ export default function Login() {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={formik.handleSubmit} className="auth-form">
       <h2>Login</h2>
 
-      <input
+      <InputField
+        label="Username"
         name="username"
         value={formik.values.username}
         onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        error={formik.errors.username}
+        touched={formik.touched.username}
+        placeholder="Enter username"
       />
-      {formik.errors.username && <p>{formik.errors.username}</p>}
 
-      <input
-        type="password"
+      <InputField
+        label="Password"
         name="password"
+        type="password"
         value={formik.values.password}
         onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        error={formik.errors.password}
+        touched={formik.touched.password}
+        placeholder="Enter password"
       />
-      {formik.errors.password && <p>{formik.errors.password}</p>}
 
-      {formik.status && <p>{formik.status}</p>}
-
+      {formik.status && (
+        <p className="form-error">{formik.status}</p>
+      )}
       <button type="submit" disabled={formik.isSubmitting}>
-        Login
+        {formik.isSubmitting ? "Logging in..." : "Login"}
       </button>
     </form>
   );

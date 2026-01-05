@@ -1,4 +1,5 @@
 import axiosInstance from "../api/axiosInstance";
+import { API_ENDPOINTS } from "../utils/apiEndpoints";
 
 /**
  * Calls FakeStore login API
@@ -8,6 +9,6 @@ import axiosInstance from "../api/axiosInstance";
 
 export async function loginApi(credentials)
 {
-    const response = await axiosInstance.post("auth/login",credentials)
+    const response = await axiosInstance.post({API_ENDPOINTS.AUTH.LOGIN},credentials)
     return response.data;
 }

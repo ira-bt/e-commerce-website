@@ -9,6 +9,6 @@ import { API_ENDPOINTS } from "../utils/apiEndpoints";
 
 export async function loginApi(credentials)
 {
-    const response = await axiosInstance.post({API_ENDPOINTS.AUTH.LOGIN},credentials)
+    const response = await axiosInstance.post(API_ENDPOINTS.AUTH.LOGIN,credentials)
     return response.data;
 }

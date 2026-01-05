@@ -13,9 +13,9 @@ export default function Navbar() {
   };
 
   return (
-    <nav style={{ display: "flex", gap: "1rem", padding: "1rem" }}>
+    <nav className="navbar">
       {isAuthenticated && (
-        <>
+        <div className="navbar__content">
           <NavLink to={ROUTES.HOME}>Home</NavLink>
           <NavLink to={ROUTES.CHECKOUT}>Checkout</NavLink>
 
@@ -24,7 +24,7 @@ export default function Navbar() {
           )}
 
           <button onClick={handleLogout}>Logout</button>
-        </>
+        </div>
       )}
     </nav>
   );

@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import RoleProtectedRoute from "./routes/RoleProtectedRoute";
 import { USER_ROLES } from "./utils/enums";
+import { ROUTES } from "./utils/routes";
 
 // TEMP placeholder pages
 const Login = () => <h2>Login Page</h2>;
@@ -13,12 +14,12 @@ const Unauthorized = () => <h2>Unauthorized</h2>;
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
+      <Route path={ROUTES.LOGIN} element={<Login />} />
 
       {/* Logged-in users */}
       <Route element={<ProtectedRoute />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/checkout" element={<Checkout />} />
+        <Route path={ROUTES.HOME} element={<Home />} />
+        <Route path={ROUTES.CHECKOUT} element={<Checkout />} />
       </Route>
 
       {/* Admin-only */}
@@ -27,10 +28,10 @@ export default function AppRoutes() {
           <RoleProtectedRoute allowedRoles={[USER_ROLES.ADMIN]} />
         }
       >
-        <Route path="/admin" element={<Admin />} />
+        <Route path={ROUTES.ADMIN} element={<Admin />} />
       </Route>
 
-      <Route path="/unauthorized" element={<Unauthorized />} />
+      <Route path={ROUTES.UNAUTHORIZED} element={<Unauthorized />} />
     </Routes>
   );
 }

@@ -5,6 +5,7 @@ import { USER_ROLES } from "./utils/enums";
 import { ROUTES } from "./utils/routes";
 import Login from "./pages/Login/Login";
 import PublicRoute from "./routes/PublicRoute";
+import AppLayout from "./layout/AppLayout";
 
 // TEMP placeholder pages
 //const Login = () => <h2>Login Page</h2>;
@@ -22,8 +23,11 @@ export default function AppRoutes() {
 
       {/* Logged-in users */}
       <Route element={<ProtectedRoute />}>
-        <Route path={ROUTES.HOME} element={<Home />} />
-        <Route path={ROUTES.CHECKOUT} element={<Checkout />} />
+        <Route element={<AppLayout/>}>
+            <Route path={ROUTES.HOME} element={<Home />} />
+            <Route path={ROUTES.CHECKOUT} element={<Checkout />} />
+        </Route>
+        
       </Route>
 
       {/* Admin-only */}
@@ -32,7 +36,9 @@ export default function AppRoutes() {
           <RoleProtectedRoute allowedRoles={[USER_ROLES.ADMIN]} />
         }
       >
-        <Route path={ROUTES.ADMIN} element={<Admin />} />
+        <Route element={<AppLayout/>}>
+            <Route path={ROUTES.ADMIN} element={<Admin />} />
+        </Route>
       </Route>
 
       <Route path={ROUTES.UNAUTHORIZED} element={<Unauthorized />} />

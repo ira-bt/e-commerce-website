@@ -1,0 +1,17 @@
+@mixin respond-sm {
+  @media (max-width: var(--bp-sm)) {
+    @content;
+  }
+}
+
+@mixin respond-md {
+  @media (max-width: var(--bp-md)) {
+    @content;
+  }
+}
+
+@mixin respond-lg {
+  @media (max-width: var(--bp-lg)) {
+    @content;
+  }
+}

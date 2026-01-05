@@ -8,5 +8,5 @@ export default function ProtectedRoute(){
 
     if(isInitializing) return null;
 
-    return isAuthenticated ? <Outlet /> : <Navigate to={ROUTES.login} replace />;
+    return isAuthenticated ? <Outlet /> : <Navigate to={ROUTES.LOGIN} replace />;
 }

@@ -35,6 +35,7 @@ export default function Login() {
         });
         navigate(ROUTES.HOME);
       } catch (error) {
+        console.log(error);
         setStatus("Invalid username or password");
       } finally {
         setSubmitting(false);

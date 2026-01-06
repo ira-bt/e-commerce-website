@@ -1,15 +1,13 @@
 import { useFormik } from "formik";
-import * as Yup from "yup";
 import { loginApi } from "../../services/auth.service";
 import { useAuth } from "../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { ROUTES } from "../../utils/routes";
 import InputField from "../../components/form/InputField";
-
-const validationSchema = Yup.object({
-  username: Yup.string().required("Username required"),
-  password: Yup.string().required("Password required"),
-});
+import { userService } from "../../services/user.service";
+import { REGEX } from "../../utils/validations";
+import { VALIDATION_MESSAGES as VM } from "../../utils/validationMessages";
+import { loginSchema } from "../../utils/validationSchemas";
 
 export default function Login() {
   const { login } = useAuth();
@@ -20,62 +18,66 @@ export default function Login() {
       username: "",
       password: "",
     },
-    validationSchema,
+    validationSchema: loginSchema,
+    validateOnMount: true,
     onSubmit: async (values, { setSubmitting, setStatus }) => {
       try {
-        const { token } = await loginApi(values);
+        /**
+         * 1️⃣ Try LOCAL login first
+         */
+        const localUser = userService.findByUsername(values.username);
+
+        if (localUser && localUser.password === values.password) {
+          login({
+            username: localUser.username,
+            email: localUser.email,
+            role: localUser.role,
+            token: crypto.randomUUID(),
+          });
+
+          navigate(ROUTES.HOME);
+          return;
+        }
 
         /**
-         * FakeStore returns only token
-         * We build user object ourselves
+         * 2️⃣ Fallback to FakeStore API
          */
+        const { token } = await loginApi(values);
+
         login({
           username: values.username,
           token,
         });
+
         navigate(ROUTES.HOME);
-      } catch (error) {
-        console.log(error);
-        setStatus("Invalid username or password");
+      } catch {
+        setStatus(VM.INVALID_CREDENTIALS);
       } finally {
         setSubmitting(false);
       }
     },
+
   });
 
   return (
     <form onSubmit={formik.handleSubmit} className="auth-form">
       <h2>Login</h2>
+      <InputField {...formik.getFieldProps("username")} label="Username"
+        error={formik.errors.username} touched={formik.touched.username} />
 
-      <InputField
-        label="Username"
-        name="username"
-        value={formik.values.username}
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        error={formik.errors.username}
-        touched={formik.touched.username}
-        placeholder="Enter username"
-      />
+      <InputField {...formik.getFieldProps("password")} label="Password" type="password"
+        error={formik.errors.password} touched={formik.touched.password} />
 
-      <InputField
-        label="Password"
-        name="password"
-        type="password"
-        value={formik.values.password}
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        error={formik.errors.password}
-        touched={formik.touched.password}
-        placeholder="Enter password"
-      />
+      {formik.status && <p className="form-error">{formik.status}</p>}
 
-      {formik.status && (
-        <p className="form-error">{formik.status}</p>
-      )}
-      <button type="submit" disabled={formik.isSubmitting}>
-        {formik.isSubmitting ? "Logging in..." : "Login"}
+      <button disabled={!formik.isValid || formik.isSubmitting}>
+        Login
       </button>
+
+      <p className="auth-form__switch">
+        Don&apos;t have an account? <Link to={ROUTES.REGISTER}>Register</Link>
+      </p>
+
     </form>
   );
 }

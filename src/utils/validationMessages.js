@@ -13,6 +13,6 @@ export const VALIDATION_MESSAGES = {
 
   // Auth errors
   INVALID_CREDENTIALS: "Invalid username or password",
-  USERNAME_EXISTS: "Username already exists",
+  USERNAME_EXISTS: "Username already exists. Please choose a different one.",
   REGISTRATION_FAILED: "Registration failed",
 };

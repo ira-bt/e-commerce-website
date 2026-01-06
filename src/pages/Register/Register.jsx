@@ -7,6 +7,7 @@ import InputField from "../../components/form/InputField";
 import { userService } from "../../services/user.service";
 import { REGEX } from "../../utils/validations";
 import { VALIDATION_MESSAGES as VM } from "../../utils/validationMessages";
+import { fakeStoreUserService } from "../../services/fakestoreUser.service";
 
 const validationSchema = Yup.object({
   username: Yup.string()
@@ -39,29 +40,50 @@ export default function Register() {
     },
     validationSchema,
     validateOnMount: true,
-    onSubmit: (values, { setSubmitting, setStatus }) => {
-      try {
-        if (userService.findByUsername(values.username)) {
-          setStatus(VM.USERNAME_EXISTS);
-          return;
+    onSubmit: async (values, { setSubmitting, setStatus }) => {
+        try {
+            /**
+             * 1️⃣ Check LOCAL users first
+             */
+            const localUser = userService.findByUsername(values.username);
+
+            if (localUser) {
+            setStatus(VM.USERNAME_EXISTS);
+            return;
+            }
+
+            /**
+             * 2️⃣ Fallback to FakeStore API users
+             */
+            const apiUserExists =
+            await fakeStoreUserService.usernameExists(values.username);
+
+            if (apiUserExists) {
+            setStatus(VM.USERNAME_EXISTS);
+            return;
+            }
+
+            /**
+             * 3️⃣ Safe to register locally
+             */
+            const newUser = userService.create(values);
+
+            login({
+            username: newUser.username,
+            email: newUser.email,
+            role: newUser.role,
+            token: crypto.randomUUID(),
+            });
+
+            navigate(ROUTES.HOME);
+        } catch (error) {
+            console.error(error);
+            setStatus(VM.REGISTRATION_FAILED);
+        } finally {
+            setSubmitting(false);
         }
+        },
 
-        const newUser = userService.create(values);
-
-        login({
-          username: newUser.username,
-          email: newUser.email,
-          role: newUser.role,
-          token: crypto.randomUUID(),
-        });
-
-        navigate(ROUTES.HOME);
-      } catch {
-        setStatus(VM.REGISTRATION_FAILED);
-      } finally {
-        setSubmitting(false);
-      }
-    },
   });
 
   return (

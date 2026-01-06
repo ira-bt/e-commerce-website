@@ -1,8 +1,7 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { loginApi } from "../../services/auth.service";
-import { useAuth } from "../../hooks/useAuth";
 import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 import { ROUTES } from "../../utils/routes";
 import InputField from "../../components/form/InputField";
 import { userService } from "../../services/user.service";
@@ -10,81 +9,86 @@ import { REGEX } from "../../utils/validations";
 import { VALIDATION_MESSAGES as VM } from "../../utils/validationMessages";
 
 const validationSchema = Yup.object({
-  username: Yup.string().required(VM.REQUIRED_USERNAME),
+  username: Yup.string()
+    .min(3, VM.USERNAME_MIN_LENGTH)
+    .required(VM.REQUIRED_USERNAME),
+
+  email: Yup.string()
+    .matches(REGEX.EMAIL, VM.INVALID_EMAIL)
+    .required(VM.REQUIRED_EMAIL),
+
   password: Yup.string()
     .matches(REGEX.PASSWORD, VM.INVALID_PASSWORD_FORMAT)
     .required(VM.REQUIRED_PASSWORD),
+
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password")], VM.PASSWORD_MISMATCH)
+    .required(VM.REQUIRED_PASSWORD),
 });
 
-export default function Login() {
+export default function Register() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
       username: "",
+      email: "",
       password: "",
+      confirmPassword: "",
     },
     validationSchema,
     validateOnMount: true,
-    onSubmit: async (values, { setSubmitting, setStatus }) => {
+    onSubmit: (values, { setSubmitting, setStatus }) => {
       try {
-        /**
-         * 1️⃣ Try LOCAL login first
-         */
-        const localUser = userService.findByUsername(values.username);
-
-        if (localUser && localUser.password === values.password) {
-          login({
-            username: localUser.username,
-            email: localUser.email,
-            role: localUser.role,
-            token: crypto.randomUUID(),
-          });
-
-          navigate(ROUTES.HOME);
+        if (userService.findByUsername(values.username)) {
+          setStatus(VM.USERNAME_EXISTS);
           return;
         }
 
-        /**
-         * 2️⃣ Fallback to FakeStore API
-         */
-        const { token } = await loginApi(values);
+        const newUser = userService.create(values);
 
         login({
-          username: values.username,
-          token,
+          username: newUser.username,
+          email: newUser.email,
+          role: newUser.role,
+          token: crypto.randomUUID(),
         });
 
         navigate(ROUTES.HOME);
       } catch {
-        setStatus(VM.INVALID_CREDENTIALS);
+        setStatus(VM.REGISTRATION_FAILED);
       } finally {
         setSubmitting(false);
       }
     },
-
   });
 
   return (
     <form onSubmit={formik.handleSubmit} className="auth-form">
-      <h2>Login</h2>
+      <h2>Create Account</h2>
+
       <InputField {...formik.getFieldProps("username")} label="Username"
         error={formik.errors.username} touched={formik.touched.username} />
+
+      <InputField {...formik.getFieldProps("email")} label="Email"
+        error={formik.errors.email} touched={formik.touched.email} />
 
       <InputField {...formik.getFieldProps("password")} label="Password" type="password"
         error={formik.errors.password} touched={formik.touched.password} />
 
+      <InputField {...formik.getFieldProps("confirmPassword")} label="Confirm Password" type="password"
+        error={formik.errors.confirmPassword} touched={formik.touched.confirmPassword} />
+
       {formik.status && <p className="form-error">{formik.status}</p>}
 
       <button disabled={!formik.isValid || formik.isSubmitting}>
-        Login
+        Register
       </button>
 
       <p className="auth-form__switch">
-        Don&apos;t have an account? <Link to={ROUTES.REGISTER}>Register</Link>
+        Already have an account? <Link to={ROUTES.LOGIN}>Login</Link>
       </p>
-
     </form>
   );
 }

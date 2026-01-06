@@ -1,9 +1,9 @@
 //Purpose: User CRUD (FakeStore API does NOT handle this)
 
 // src/services/user.service.js
-import { storageService } from './storage.service';
-import { STORAGE_KEYS } from '@/utils/enums';
-import { createUserSchema } from '@/utils/schemas';
+import  storageService  from './storage.service';
+import { STORAGE_KEYS } from '../utils/enums';
+import { createUserSchema } from '../utils/schema';
 
 export const userService = {
   getAll() {
@@ -12,13 +12,20 @@ export const userService = {
 
   create(user) {
     const users = this.getAll();
-    const newUser = createUserSchema(user);
-    users.push(newUser);
+    const baseUser = createUserSchema(user);
+    //demo auth
+    const persistedUser = {
+      ...baseUser,
+      password: user.password, // demo-only
+    };
+    users.push(persistedUser);
     storageService.set(STORAGE_KEYS.USERS, users);
-    return newUser;
+    return persistedUser;
   },
 
-  findByEmail(email) {
-    return this.getAll().find((u) => u.email === email);
+  findByUsername(username) {
+    return this.getAll().find(
+      (u) => u.username === username
+    );
   },
 };

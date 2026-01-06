@@ -7,6 +7,7 @@ import Login from "./pages/Login/Login";
 import PublicRoute from "./routes/PublicRoute";
 import AppLayout from "./layout/AppLayout";
 import ProductsPage from "./pages/Products/ProductPage";
+import Register from "./pages/Register/Register";
 
 // TEMP placeholder pages
 //const Login = () => <h2>Login Page</h2>;
@@ -23,6 +24,8 @@ export default function AppRoutes() {
       </Route>
       <Route element={<PublicRoute />}>
         <Route path={ROUTES.LOGIN} element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
       </Route>  
 
       {/* Logged-in users */}

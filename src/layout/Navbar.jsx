@@ -27,7 +27,7 @@ export default function Navbar() {
           className="navbar__logo"
           onClick={() => navigate(ROUTES.HOME)}
         >
-          ShopEase
+          FakeStore
         </div>
 
         {/* Hamburger */}

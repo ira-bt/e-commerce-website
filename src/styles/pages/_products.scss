@@ -1,0 +1,149 @@
+/* ===========================
+   PRODUCTS PAGE
+=========================== */
+
+.products {
+  max-width: var(--container-lg);
+  margin: 0 auto;
+  padding: var(--space-lg);
+}
+
+.products__title {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.products__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+
+/* ===========================
+   PRODUCT CARD
+=========================== */
+
+/* CARD */
+.product-card {
+  display: grid;
+  grid-template-rows:
+    220px   /* image */
+    auto    /* content */
+    56px;   /* footer */
+
+  background: var(--color-surface);
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* IMAGE */
+.product-card__image-wrapper {
+  background: var(--color-background-alt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px 8px;
+}
+
+.product-card__image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* CONTENT */
+.product-card__content {
+  padding: 14px 16px;
+  display: grid;
+  grid-template-rows:
+    minmax(3em, auto)
+    auto    /* category */
+    auto    /* rating */
+    1fr     /* spacer */
+    auto;   /* price */
+  row-gap: 6px;
+}
+
+.product-card__title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.3;
+  /* Clamp */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  /* FORCE SAME HEIGHT FOR ALL CARDS */
+  min-height: calc(1.3em * 2);
+ 
+}
+
+.product-card__category {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  text-transform: capitalize;
+}
+
+.product-card__rating {
+  font-size: 0.8rem;
+}
+
+.product-card__price {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+/* FOOTER */
+.product-card__footer {
+  border-top: 1px solid var(--color-border);
+  padding: 10px 16px;
+  display: flex;
+  gap: 10px;
+}
+
+.product-card__footer button {
+  flex: 1;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.product-card__footer .primary {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.product-card__footer .secondary {
+  background: var(--color-background-alt);
+}
+
+/* ===========================
+   STATES
+=========================== */
+
+.products__loading,
+.products__error {
+  text-align: center;
+  padding: 40px;
+  color: var(--color-text-muted);
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media (max-width: var(--bp-md)) {
+  .products {
+    padding: var(--space-md);
+  }
+}

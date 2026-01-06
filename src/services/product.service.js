@@ -1,47 +1,79 @@
 // Purpose: Product CRUD + API → LocalStorage bootstrap
+// Single source of truth: LocalStorage
 
-import { storageService } from './storage.service';
-import { STORAGE_KEYS } from '@/utils/enums';
-import { normalizeProduct } from '@/utils/schemas';
-import axiosInstance from '@/api/axiosInstance';
+import axiosInstance from '../api/axiosInstance'
+import storageService from './storage.service';
+import { STORAGE_KEYS } from '../utils/enums';
+import { normalizeProduct } from '../utils/schema';
 
 export const productService = {
-
-  //If products exist in LocalStorage → use them, Else → fetch from API → normalize → store → use
+  /**
+   * Bootstrap products:
+   * - If products exist in LocalStorage → return them
+   * - Else → fetch from API → normalize → store → return
+   */
   async bootstrapProducts() {
-    const existing = storageService.get(STORAGE_KEYS.PRODUCTS);
-    if (existing?.length) return existing;
+    const existingProducts = storageService.get(STORAGE_KEYS.PRODUCTS);
+
+    if (Array.isArray(existingProducts) && existingProducts.length > 0) {
+      return existingProducts;
+    }
 
     const response = await axiosInstance.get('/products');
-    const normalized = response.data.map(normalizeProduct);
+    const normalizedProducts = response.data.map(normalizeProduct);
 
-    storageService.set(STORAGE_KEYS.PRODUCTS, normalized);
-    return normalized;
+    storageService.set(STORAGE_KEYS.PRODUCTS, normalizedProducts);
+    return normalizedProducts;
   },
 
+  /**
+   * Read all products (always from LocalStorage)
+   */
   getAll() {
     return storageService.get(STORAGE_KEYS.PRODUCTS) ?? [];
   },
 
+  /**
+   * Read single product by ID
+   */
   getById(id) {
-    return this.getAll().find((p) => p.id === id);
+    return this.getAll().find((product) => product.id === id);
   },
 
+  /**
+   * Create product (admin use)
+   */
   create(product) {
     const products = this.getAll();
-    products.push(product);
-    storageService.set(STORAGE_KEYS.PRODUCTS, products);
+    const updatedProducts = [...products, product];
+
+    storageService.set(STORAGE_KEYS.PRODUCTS, updatedProducts);
+    return product;
   },
 
+  /**
+   * Update product (admin use)
+   */
   update(updatedProduct) {
-    const products = this.getAll().map((p) =>
-      p.id === updatedProduct.id ? updatedProduct : p
+    const products = this.getAll();
+
+    const updatedProducts = products.map((product) =>
+      product.id === updatedProduct.id ? updatedProduct : product
     );
-    storageService.set(STORAGE_KEYS.PRODUCTS, products);
+
+    storageService.set(STORAGE_KEYS.PRODUCTS, updatedProducts);
+    return updatedProduct;
   },
 
+  /**
+   * Delete product by ID (admin use)
+   */
   delete(id) {
-    const products = this.getAll().filter((p) => p.id !== id);
-    storageService.set(STORAGE_KEYS.PRODUCTS, products);
+    const products = this.getAll();
+    const updatedProducts = products.filter(
+      (product) => product.id !== id
+    );
+
+    storageService.set(STORAGE_KEYS.PRODUCTS, updatedProducts);
   },
 };

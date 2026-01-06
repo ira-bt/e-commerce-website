@@ -1,5 +1,4 @@
 import { useFormik } from "formik";
-import * as Yup from "yup";
 import { loginApi } from "../../services/auth.service";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate, Link } from "react-router-dom";
@@ -8,13 +7,7 @@ import InputField from "../../components/form/InputField";
 import { userService } from "../../services/user.service";
 import { REGEX } from "../../utils/validations";
 import { VALIDATION_MESSAGES as VM } from "../../utils/validationMessages";
-
-const validationSchema = Yup.object({
-  username: Yup.string().required(VM.REQUIRED_USERNAME),
-  password: Yup.string()
-    .matches(REGEX.PASSWORD, VM.INVALID_PASSWORD_FORMAT)
-    .required(VM.REQUIRED_PASSWORD),
-});
+import { loginSchema } from "../../utils/validationSchemas";
 
 export default function Login() {
   const { login } = useAuth();
@@ -25,7 +18,7 @@ export default function Login() {
       username: "",
       password: "",
     },
-    validationSchema,
+    validationSchema: loginSchema,
     validateOnMount: true,
     onSubmit: async (values, { setSubmitting, setStatus }) => {
       try {

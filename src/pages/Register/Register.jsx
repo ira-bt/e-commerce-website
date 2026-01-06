@@ -5,27 +5,9 @@ import { useAuth } from "../../hooks/useAuth";
 import { ROUTES } from "../../utils/routes";
 import InputField from "../../components/form/InputField";
 import { userService } from "../../services/user.service";
-import { REGEX } from "../../utils/validations";
 import { VALIDATION_MESSAGES as VM } from "../../utils/validationMessages";
 import { fakeStoreUserService } from "../../services/fakestoreUser.service";
-
-const validationSchema = Yup.object({
-  username: Yup.string()
-    .min(3, VM.USERNAME_MIN_LENGTH)
-    .required(VM.REQUIRED_USERNAME),
-
-  email: Yup.string()
-    .matches(REGEX.EMAIL, VM.INVALID_EMAIL)
-    .required(VM.REQUIRED_EMAIL),
-
-  password: Yup.string()
-    .matches(REGEX.PASSWORD, VM.INVALID_PASSWORD_FORMAT)
-    .required(VM.REQUIRED_PASSWORD),
-
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password")], VM.PASSWORD_MISMATCH)
-    .required(VM.REQUIRED_PASSWORD),
-});
+import { registerSchema } from "../../utils/validationSchemas";
 
 export default function Register() {
   const { login } = useAuth();
@@ -38,7 +20,7 @@ export default function Register() {
       password: "",
       confirmPassword: "",
     },
-    validationSchema,
+    validationSchema: registerSchema,
     validateOnMount: true,
     onSubmit: async (values, { setSubmitting, setStatus }) => {
         try {

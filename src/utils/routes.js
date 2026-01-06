@@ -12,4 +12,14 @@ export const ROUTES = Object.freeze({
 
   // Admin
   ADMIN: "/admin",
+
+  //Register
+  REGISTER: "/register",
+
+  //cart
+  CART:"/cart",
+
+  //profile
+  PROFILE: "/profile",
+
 });

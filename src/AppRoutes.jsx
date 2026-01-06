@@ -8,7 +8,7 @@ import PublicRoute from "./routes/PublicRoute";
 import AppLayout from "./layout/AppLayout";
 import ProductsPage from "./pages/Products/ProductPage";
 import Register from "./pages/Register/Register";
-
+import Cart from "./pages/Cart/Cart";
 // TEMP placeholder pages
 //const Login = () => <h2>Login Page</h2>;
 //const Home = () => <h2>Home</h2>;
@@ -33,8 +33,12 @@ export default function AppRoutes() {
         <Route element={<AppLayout/>}>
             <Route path={ROUTES.CHECKOUT} element={<Checkout />} />
         </Route>
-        
       </Route>
+      <Route element={<ProtectedRoute />}> 
+        <Route element={<AppLayout />}> 
+          <Route path={ROUTES.CART} element={<Cart />} /> 
+        </Route> 
+      </Route> 
 
       {/* Admin-only */}
       <Route

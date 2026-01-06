@@ -18,6 +18,9 @@ const Unauthorized = () => <h2>Unauthorized</h2>;
 export default function AppRoutes() {
   return (
     <Routes>
+      <Route element={<AppLayout />}>
+        <Route path={ROUTES.HOME} element={<ProductsPage />} />
+      </Route>
       <Route element={<PublicRoute />}>
         <Route path={ROUTES.LOGIN} element={<Login />} />
       </Route>  
@@ -25,7 +28,6 @@ export default function AppRoutes() {
       {/* Logged-in users */}
       <Route element={<ProtectedRoute />}>
         <Route element={<AppLayout/>}>
-            <Route path={ROUTES.HOME} element={<ProductsPage />} />
             <Route path={ROUTES.CHECKOUT} element={<Checkout />} />
         </Route>
         

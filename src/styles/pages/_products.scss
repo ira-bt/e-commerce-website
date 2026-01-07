@@ -8,7 +8,7 @@
   max-width: var(--container-lg);
   margin: 0 auto;
   padding: var(--space-lg);
-   @include respond-md {
+  @include respond-md {
     padding: var(--space-md);
   }
 }

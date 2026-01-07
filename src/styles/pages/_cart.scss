@@ -16,8 +16,7 @@
 
   overflow-x: hidden; /* CRITICAL */
 
-  /* Desktop only */
-  @media (min-width: 1024px) {
+  @include respond-lg {
     max-width: var(--container-width);
     grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
     gap: var(--space-xl);
@@ -65,8 +64,7 @@
   min-width: 0; /* IMPORTANT */
   overflow: hidden;
 
-  /* Desktop layout */
-  @media (min-width: 768px) {
+ @include respond-md {
     grid-template-columns: 72px minmax(0, 1fr) auto;
   }
 

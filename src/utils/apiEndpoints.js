@@ -16,8 +16,8 @@ export const API_ENDPOINTS = Object.freeze({
     SINGLE: (id) => `/users/${id}`,
   },
 
-  CARTS: {
+   CARTS: {
     ALL: "/carts",
-    USER: (userId) => `/carts/user/${userId}`,
+    SINGLE: (cartId) => `/carts/${cartId}`, // ✅ CORRECT
   },
 });

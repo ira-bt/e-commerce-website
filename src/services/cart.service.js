@@ -1,34 +1,35 @@
-// cart.service.js
 import storageService from "./storage.service";
 import { STORAGE_KEYS } from "../utils/enums";
 import { cartApiService } from "./cart.api";
 
 export const cartService = {
-  getAllCarts() {
-    return storageService.get(STORAGE_KEYS.CARTS) ?? [];
-  },
-
   getUserCart(userId) {
-    return this.getAllCarts().find(c => c.userId === userId) ?? null;
+    return (
+      storageService
+        .get(STORAGE_KEYS.CARTS)
+        ?.find(c => c.userId === userId) ?? null
+    );
   },
 
   saveCart(cart) {
-    const carts = this.getAllCarts().filter(c => c.userId !== cart.userId);
+    const carts =
+      storageService.get(STORAGE_KEYS.CARTS)?.filter(
+        c => c.userId !== cart.userId
+      ) ?? [];
+
     storageService.set(STORAGE_KEYS.CARTS, [...carts, cart]);
   },
 
-  /* =========================
-     ADD TO CART (FIXED, SAFE)
-  ========================= */
   async addToCart(userId, product) {
-    const existingCart = this.getUserCart(userId);
+    let cart = this.getUserCart(userId);
 
-    const cart = existingCart ?? {
-      id: crypto.randomUUID(),
-      apiId: null,
-      userId,
-      items: [],
-    };
+    if (!cart) {
+      cart = {
+        userId,
+        items: [],
+        apiId: null,
+      };
+    }
 
     const items = cart.items.some(i => i.productId === product.id)
       ? cart.items.map(i =>
@@ -47,65 +48,51 @@ export const cartService = {
           },
         ];
 
-    const newCart = { ...cart, items };
+    cart = { ...cart, items };
 
-    this.saveCart(newCart);
-
-    // API sync (non-blocking UI)
-    if (!newCart.apiId) {
-      const res = await cartApiService.createCart(newCart);
-      newCart.apiId = res.data.id;
-      this.saveCart(newCart);
+    // ✅ API FIRST
+    if (!cart.apiId) {
+      const res = await cartApiService.createCart(cart);
+      cart.apiId = res.data.id;
     } else {
-      cartApiService.updateCart(newCart).catch(() => {});
+      await cartApiService.updateCart(cart);
     }
 
-    return newCart;
+    this.saveCart(cart);
+    return cart;
   },
 
-  /* =========================
-     UPDATE QUANTITY (YOU WERE RIGHT)
-  ========================= */
   async updateQuantity(userId, productId, delta) {
     const cart = this.getUserCart(userId);
     if (!cart) return null;
 
-    const newCart = {
-      ...cart,
-      items: cart.items
-        .map(item =>
-          item.productId === productId
-            ? { ...item, quantity: item.quantity + delta }
-            : item
-        )
-        .filter(item => item.quantity > 0),
-    };
+    const items = cart.items
+      .map(i =>
+        i.productId === productId
+          ? { ...i, quantity: i.quantity + delta }
+          : i
+      )
+      .filter(i => i.quantity > 0);
 
-    this.saveCart(newCart);
+    const updatedCart = { ...cart, items };
 
-    if (newCart.apiId) {
-      cartApiService.updateCart(newCart).catch(() => {});
-    }
+    await cartApiService.updateCart(updatedCart); // ✅ REAL PUT
+    this.saveCart(updatedCart);
 
-    return newCart;
+    return updatedCart;
   },
+
   async clearCart(userId) {
-  const cart = this.getUserCart(userId);
-  if (!cart) return null;
+    const cart = this.getUserCart(userId);
+    if (!cart || !cart.apiId) return;
 
-  // Remove from local storage
-  storageService.set(
-    STORAGE_KEYS.CARTS,
-    this.getAllCarts().filter(c => c.userId !== userId)
-  );
+    await cartApiService.deleteCart(cart.apiId); // ✅ REAL DELETE
 
-  // Delete from API if exists
-  if (cart.apiId) {
-    await cartApiService.deleteCart(cart.apiId).catch(() => {});
-  }
-
-  return null; // always return null to indicate empty cart
-},
-
+    storageService.set(
+      STORAGE_KEYS.CARTS,
+      storageService
+        .get(STORAGE_KEYS.CARTS)
+        ?.filter(c => c.userId !== userId)
+    );
+  },
 };
-

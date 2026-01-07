@@ -103,7 +103,7 @@
     font-size: var(--font-size-body);
     color: var(--color-text);
 
-    @media (max-width: 767px) {
+    @include respond-md {
       grid-column: 1 / -1;
       text-align: right;
       margin-top: var(--space-xs);
@@ -127,11 +127,8 @@
 
   min-width: 0;
 
-  /* Mobile: summary first */
-  order: -1;
-
   /* Desktop: summary right */
-  @media (min-width: 1024px) {
+  @include respond-lg {
     order: 0;
   }
 

@@ -2,19 +2,19 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { cartService } from "../../services/cart.service";
 import { ROUTES } from "../../utils/routes";
+import { useEffect } from "react";
 
 export default function Cart() {
   const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
 
-  
-  // Route guard
-  if (!isAuthenticated) {
-    navigate(ROUTES.LOGIN);
-    return null;
-  }
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate(ROUTES.LOGIN, { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
-  if (!user) return null;
+  if (!isAuthenticated || !user) return null;
 
   // DERIVED STATE (NO EFFECT, NO SETSTATE)
   const cart = cartService.getUserCart(user.username);

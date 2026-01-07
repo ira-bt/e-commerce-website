@@ -16,7 +16,13 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.11.0",
-    "yup": "^1.7.1"
+    "yup": "^1.7.1",
+    "next": "16.1.1",
+    "class-variance-authority": "0.7.1",
+    "clsx": "2.1.1",
+    "lucide-react": "0.562.0",
+    "tailwind-merge": "3.4.0",
+    "tailwindcss-animate": "1.0.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
@@ -28,6 +34,10 @@
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
     "sass": "^1.97.1",
-    "vite": "^7.2.4"
+    "vite": "^7.2.4",
+    "@types/node": "25.0.3",
+    "typescript": "5.9.3",
+    "tailwindcss": "4.1.18",
+    "postcss": "8.5.6"
   }
 }

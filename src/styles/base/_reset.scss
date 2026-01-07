@@ -1,0 +1,52 @@
+/* Enhanced reset with viewport and touch optimizations */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* Add touch device optimizations */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* Ensure responsive images and media */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Touch device button sizing for accessibility */
+button,
+a {
+  min-height: 44px; /* iOS touch target size */
+  min-width: 44px;
+}
+
+/* Prevent text zoom on input focus in mobile */
+input,
+textarea {
+  font-size: 16px;
+}

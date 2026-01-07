@@ -1,3 +1,5 @@
+@use "../base/mixins" as *;
+
 /* ===========================
    PRODUCTS PAGE
 =========================== */
@@ -6,6 +8,9 @@
   max-width: var(--container-lg);
   margin: 0 auto;
   padding: var(--space-lg);
+   @include respond-md {
+    padding: var(--space-md);
+  }
 }
 
 .products__title {
@@ -136,14 +141,4 @@
   text-align: center;
   padding: 40px;
   color: var(--color-text-muted);
-}
-
-/* ===========================
-   RESPONSIVE
-=========================== */
-
-@media (max-width: var(--bp-md)) {
-  .products {
-    padding: var(--space-md);
-  }
 }

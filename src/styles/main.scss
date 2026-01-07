@@ -1,6 +1,4 @@
 /* Global SCSS entry point */
-
-@use "./base/reset";
 @use "./base/variables";
 @use "./base/typography";
 
@@ -11,3 +9,4 @@
 @use "./base/mixins";
 @use "./pages/products";
 @use "./pages/auth";
+@use "./pages/cart";

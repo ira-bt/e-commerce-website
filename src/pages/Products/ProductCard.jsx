@@ -1,4 +1,19 @@
+import { useNavigate } from "react-router-dom"; 
+import { useAuth } from "../../hooks/useAuth"; 
+import { cartService } from "../../services/cart.service"; 
+import {ROUTES} from "../../utils/routes" 
+
 export default function ProductCard({ product }) {
+  const { isAuthenticated, user } = useAuth(); 
+  const navigate = useNavigate(); 
+  const handleAddToCart = () => { 
+    if (!isAuthenticated) { 
+      navigate(ROUTES.LOGIN); 
+      return; 
+    } 
+    cartService.addToCart(user.username, product); 
+    navigate(ROUTES.CART); 
+  };
   return (
     <div className="product-card">
       <div className="product-card__image-wrapper">
@@ -20,13 +35,13 @@ export default function ProductCard({ product }) {
         </div>
 
         <div className="product-card__price">
-          ₹{product.price}
+          ${product.price}
         </div>
       </div>
 
       <div className="product-card__footer">
         <button className="secondary">View</button>
-        <button className="primary">Add to Cart</button>
+        <button className="primary" onClick={handleAddToCart}>Add to Cart</button>
       </div>
     </div>
   );

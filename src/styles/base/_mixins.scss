@@ -1,17 +1,18 @@
+@use "./variables" as *;
 @mixin respond-sm {
-  @media (max-width: var(--bp-sm)) {
+  @media (max-width: $bp-sm) {
     @content;
   }
 }
 
 @mixin respond-md {
-  @media (max-width: var(--bp-md)) {
+  @media (max-width: $bp-md) {
     @content;
   }
 }
 
 @mixin respond-lg {
-  @media (max-width: var(--bp-lg)) {
+  @media (max-width: $bp-lg) {
     @content;
   }
 }

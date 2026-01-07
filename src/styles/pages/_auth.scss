@@ -1,3 +1,5 @@
+@use "../base/mixins" as *;
+
 .auth-form {
   max-width: 400px;
   margin: 60px auto;
@@ -120,14 +122,8 @@
       }
     }
   }
-}
-
-/* =========================
-   Mobile Optimization
-========================= */
-
-@media (max-width: 480px) {
-  .auth-form {
+  /* ✅ Mobile using mixin */
+  @include respond-sm {
     margin: 32px 16px;
     padding: var(--space-md);
   }

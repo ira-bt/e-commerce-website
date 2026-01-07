@@ -65,7 +65,7 @@ $bp-xl: 1280px;
 }
 
 /* Added media query for reduced font sizes on small screens */
-@media (max-width: 480px) {
+@include respond-sm {
   :root {
     --font-size-h1: 1.75rem;
     --font-size-h2: 1.5rem;

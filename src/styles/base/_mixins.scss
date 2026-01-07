@@ -1,4 +1,12 @@
+/* Enhanced breakpoint mixins with more precise ranges */
 @use "./variables" as *;
+
+@mixin respond-xs {
+  @media (max-width: $bp-xs) {
+    @content;
+  }
+}
+
 @mixin respond-sm {
   @media (max-width: $bp-sm) {
     @content;
@@ -14,5 +22,41 @@
 @mixin respond-lg {
   @media (max-width: $bp-lg) {
     @content;
+  }
+}
+
+@mixin respond-xl {
+  @media (max-width: $bp-xl) {
+    @content;
+  }
+}
+
+/* Mobile-first breakup mixin (min-width) */
+@mixin from-sm {
+  @media (min-width: $bp-sm) {
+    @content;
+  }
+}
+
+@mixin from-md {
+  @media (min-width: $bp-md) {
+    @content;
+  }
+}
+
+@mixin from-lg {
+  @media (min-width: $bp-lg) {
+    @content;
+  }
+}
+
+/* Flexible container mixin */
+@mixin container-padding {
+  padding-left: var(--space-md);
+  padding-right: var(--space-md);
+  
+  @include from-sm {
+    padding-left: var(--space-lg);
+    padding-right: var(--space-lg);
   }
 }

@@ -1,6 +1,7 @@
 /* Global SCSS entry point */
 @use "./base/variables";
 @use "./base/typography";
+@use "./base/reset";
 
 @use "./layout/layout-shell";
 @use "./layout/navbar";

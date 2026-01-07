@@ -1,17 +1,27 @@
+/* Improved responsive layout with better mobile padding */
 @use "../base/mixins" as *;
+
 .app-layout {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 .app-main {
   flex: 1;
   width: 100%;
   max-width: var(--container-width);
-  margin: 0 auto;
-  padding: var(--space-lg);
-  @include respond-md {
-    padding: var(--space-md);
+  margin-inline: auto;
+  min-width: 0;
+  padding: var(--space-md);
+
+  @include from-sm {
+    padding: var(--space-lg);
+  }
+
+  /* Ensure proper spacing on larger screens */
+  @include from-lg {
+    padding: var(--space-xl);
   }
 }

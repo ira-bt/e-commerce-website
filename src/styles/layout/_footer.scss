@@ -1,3 +1,6 @@
+/* Enhanced footer with responsive padding and better mobile support */
+@use "../base/mixins" as *;
+
 .footer {
   margin-top: auto;
   border-top: 1px solid var(--color-border);
@@ -13,4 +16,7 @@
   color: var(--color-muted);
   letter-spacing: 0.2px;
 
+  @include from-sm {
+    padding: var(--space-lg);
+  }
 }

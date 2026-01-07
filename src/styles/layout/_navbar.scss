@@ -1,16 +1,26 @@
+/* Improved responsive navbar with better mobile support */
 @use "../base/mixins" as *;
+
 .navbar {
   background: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  overflow-x: clip;
 }
 
 .navbar__container {
   max-width: var(--container-width);
   margin: 0 auto;
-  padding: var(--space-md);
+  padding: var(--space-md) var(--space-md);
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  @include from-sm {
+    padding: var(--space-md) var(--space-lg);
+  }
 }
 
 /* Logo */
@@ -19,33 +29,49 @@
   font-weight: 700;
   color: var(--color-primary);
   cursor: pointer;
+  white-space: nowrap;
+
+  @include respond-sm {
+    font-size: 1.1rem;
+  }
 }
 
 /* Menu */
 .navbar__menu {
   display: flex;
   align-items: center;
-  gap: var(--space-lg);
-  &.is-open {
-    display: flex;
+  gap: var(--space-md);
+
+  @include respond-md {
+    gap: var(--space-sm);
   }
 
   &.is-admin {
     background: #e3afaf;
   }
+
   /* MOBILE MENU */
   @include respond-md {
     position: absolute;
-    top: 64px;
-    right: 0;
-    background: var(--color-surface);
-    width: 200px;
+    top: calc(100% + 8px);
+    right: var(--space-md);
+
+    width: calc(100vw - var(--space-lg) * 2);
+    max-width: 280px;
+
     flex-direction: column;
     align-items: stretch;
+
     padding: var(--space-md);
+    background: var(--color-surface);
     border: 1px solid var(--color-border);
+    border-radius: 12px;
+
+    box-shadow: var(--shadow-card);
+
     display: none;
   }
+
   &.is-open {
     @include respond-md {
       display: flex;
@@ -57,10 +83,14 @@
   text-decoration: none;
   color: var(--color-text);
   font-weight: 500;
+  padding-top: 10px;
+  white-space: nowrap;
+  transition: color 0.2s ease;
 
   @include respond-md {
     width: 100%;
     text-align: left;
+    white-space: normal;
   }
 }
 
@@ -75,12 +105,18 @@
   padding: var(--space-sm) var(--space-md);
   border-radius: 6px;
   cursor: pointer;
+  font-size: inherit;
+  font-weight: 500;
+  transition: background 0.2s ease;
+  white-space: nowrap;
+
   &:hover {
     background: var(--color-primary-hover);
   }
-   @include respond-md {
+
+  @include respond-md {
     width: 100%;
-    text-align: left;
+    white-space: normal;
   }
 }
 
@@ -91,6 +127,9 @@
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
+  padding: 0;
+  color: var(--color-text);
+
   @include respond-md {
     display: block;
   }
@@ -101,6 +140,7 @@
   text-decoration: none;
   color: var(--color-text);
   font-weight: 500;
+  transition: color 0.2s ease;
 }
 
 /* Active route */
@@ -120,10 +160,18 @@
   &:hover {
     background: var(--color-primary-hover);
   }
+
+  @include respond-md {
+    background: var(--color-primary);
+  }
 }
 
 /* Secondary button */
 .navbar__link--secondary {
   background: var(--color-background-alt);
   color: var(--color-text);
+
+  &:hover {
+    background: var(--color-border);
+  }
 }

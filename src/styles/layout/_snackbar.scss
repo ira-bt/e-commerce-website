@@ -1,3 +1,4 @@
+/* Snackbar Styles */
 .snackbar {
   position: fixed;
   bottom: 24px;
@@ -9,12 +10,23 @@
   font-weight: 500;
   z-index: 999;
   animation: slideUp 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.snackbar--error {
+  background-color: var(--color-error-bg);
+  color: var(--color-error);
+  border-left: 4px solid var(--color-error);
 }
 
 .snackbar--success {
-  background: #16a34a;
-  color: white;
+  background-color: var(--color-success-bg);
+  color: var(--color-success);
+  border-left: 4px solid var(--color-success);
 }
+
 
 @keyframes slideUp {
   from {

@@ -1,3 +1,5 @@
+"use client"
+
 import { useFormik } from "formik"
 import { loginApi } from "../../services/auth.service"
 import { useAuth } from "../../hooks/useAuth"
@@ -44,10 +46,26 @@ export default function Login() {
          */
         const { token } = await loginApi(values)
 
-        login({
-          username: values.username,
-          token,
-        })
+        await userService.bootstrapUsers()
+        const apiUser = userService.findByUsername(values.username)
+
+        if (apiUser) {
+          login({
+            id: apiUser.id,
+            username: apiUser.username,
+            email: apiUser.email,
+            role: apiUser.role,
+            token,
+          })
+        } else {
+          // If user not found in localStorage after bootstrap, create a minimal user object
+          login({
+            username: values.username,
+            email: values.username + "@example.com",
+            role: "user",
+            token,
+          })
+        }
 
         navigate(ROUTES.HOME)
       } catch {

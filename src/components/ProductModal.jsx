@@ -55,6 +55,6 @@ export default function ProductModal({ product, onClose }) {
         </div>
       </div>
     </div>,
-    document.getElementById("modal-root"),
+    document.getElementById("root"),
   )
 }

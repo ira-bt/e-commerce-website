@@ -108,6 +108,28 @@ export const userService = {
   },
 
   /**
+   * Update user - Hit API then sync localStorage
+   */
+  async updateWithAPI(updatedUser) {
+    try {
+      try {
+        await axiosInstance.put(API_ENDPOINTS.USERS.SINGLE(updatedUser.id), updatedUser)
+      } catch (apiError) {
+        console.log("API update failed:", apiError.message)
+      }
+
+      // Always sync to localStorage
+      const users = this.getAll()
+      const updatedUsers = users.map((user) => (user.id === updatedUser.id ? updatedUser : user))
+      storageService.set(STORAGE_KEYS.USERS, updatedUsers)
+      return updatedUser
+    } catch (err) {
+      console.error("Update user error:", err)
+      throw err
+    }
+  },
+
+  /**
    * Delete user - Hit API then sync localStorage
    */
   async delete(id) {

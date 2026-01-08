@@ -9,6 +9,7 @@ import ProductsPage from "./pages/Products/ProductPage"
 import Register from "./pages/Register/Register"
 import Cart from "./pages/Cart/Cart"
 import AdminPanel from "./pages/Admin/AdminPanel"
+import Profile from "./pages/Profile/Profile"
 
 // TEMP placeholder pages
 const Unauthorized = () => <h2>Unauthorized</h2>
@@ -27,6 +28,7 @@ export default function AppRoutes() {
       <Route element={<RoleProtectedRoute allowedRoles={[USER_ROLES.USER]} />}>
         <Route element={<AppLayout />}>
           <Route path={ROUTES.CART} element={<Cart />} />
+          <Route path={ROUTES.PROFILE} element={<Profile />} />
         </Route>
       </Route>
 

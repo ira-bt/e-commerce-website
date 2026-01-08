@@ -24,19 +24,14 @@ export default function FiltersPanel({
 
     return () => clearTimeout(timer)
   }, [localSearchQuery, onSearchChange])
-
-  const getSliderBackground = (value, min, max) => {
-    const percent = ((value - min) / (max - min)) * 100
-    return `linear-gradient(to right, var(--color-primary) 0%, var(--color-primary) ${percent}%, var(--color-border) ${percent}%, var(--color-border) 100%)`
-  }
-
   const handleMinRangeChange = (e) => {
     const newMin = Math.min(Number.parseInt(e.target.value), priceRange.max)
     onPriceChange({
       ...priceRange,
       min: newMin,
     })
-    e.target.style.background = getSliderBackground(newMin, priceStats.min, priceStats.max)
+    const percent = ((newMin - priceStats.min) / (priceStats.max - priceStats.min)) * 100
+    e.target.style.setProperty("--slider-percent", `${percent}%`)
   }
 
   const handleMaxRangeChange = (e) => {
@@ -45,7 +40,8 @@ export default function FiltersPanel({
       ...priceRange,
       max: newMax,
     })
-    e.target.style.background = getSliderBackground(newMax, priceStats.min, priceStats.max)
+    const percent = ((newMax - priceStats.min) / (priceStats.max - priceStats.min)) * 100
+    e.target.style.setProperty("--slider-percent", `${percent}%`)
   }
 
   return (
@@ -138,7 +134,6 @@ export default function FiltersPanel({
             max={priceStats.max}
             value={priceRange.min}
             onChange={handleMinRangeChange}
-            style={{ background: getSliderBackground(priceRange.min, priceStats.min, priceStats.max) }}
           />
           <input
             type="range"
@@ -147,7 +142,6 @@ export default function FiltersPanel({
             max={priceStats.max}
             value={priceRange.max}
             onChange={handleMaxRangeChange}
-            style={{ background: getSliderBackground(priceRange.max, priceStats.min, priceStats.max) }}
           />
         </div>
       </div>

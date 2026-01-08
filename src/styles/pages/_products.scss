@@ -1,7 +1,10 @@
+/* Fully responsive product grid with improved mobile layout */
 @use "../base/mixins" as *;
+
 /* ===========================
    PRODUCTS PAGE LAYOUT
 =========================== */
+
 .products {
   max-width: var(--container-width);
   margin: 0 auto;
@@ -82,9 +85,12 @@
   font-size: 1.2rem;
   margin-left: var(--space-sm);
 }
+
 /* ===========================
    FILTERS PANEL
 =========================== */
+
+/* updated filters panel to work with new button positioning */
 .products__filters {
   display: none;
   flex-direction: column;
@@ -126,9 +132,12 @@
   color: var(--color-text);
   text-transform: capitalize;
 }
+
 /* ===========================
    SEARCH INPUT
 =========================== */
+
+/* Added search input styles */
 .products__search-input {
   width: 100%;
   padding: var(--space-sm) var(--space-md);
@@ -256,6 +265,14 @@
   appearance: none;
   cursor: pointer;
   transition: background 0.1s ease;
+  --slider-percent: 0%;
+  background: linear-gradient(
+    to right,
+    var(--color-primary) 0%,
+    var(--color-primary) var(--slider-percent),
+    var(--color-border) var(--slider-percent),
+    var(--color-border) 100%
+  );
 
   &::-webkit-slider-runnable-track {
     width: 100%;
@@ -356,9 +373,12 @@
     gap: 24px;
   }
 }
+
 /* ===========================
    PAGINATION
 =========================== */
+
+/* Added pagination styles */
 .products__pagination {
   display: flex;
   justify-content: center;
@@ -455,6 +475,8 @@
 /* ===========================
    NO RESULTS STATE
 =========================== */
+
+/* Added no results state styling */
 .products__no-results {
   text-align: center;
   padding: 60px var(--space-lg);
@@ -467,9 +489,12 @@
     margin: 0;
   }
 }
+
 /* ===========================
    PRODUCT CARD
 =========================== */
+
+/* CARD */
 .product-card {
   display: grid;
   grid-template-rows:

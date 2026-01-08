@@ -1,51 +1,98 @@
 import storageService from "./storage.service";
 import { STORAGE_KEYS } from "../utils/enums";
+import { cartApiService } from "./cart.api";
 
 export const cartService = {
-  getAllCarts() {
-    return storageService.get(STORAGE_KEYS.CARTS) ?? [];
-  },
-
   getUserCart(userId) {
-    const carts = this.getAllCarts();
-    return carts.find(c => c.userId === userId) ?? null;
+    return (
+      storageService
+        .get(STORAGE_KEYS.CARTS)
+        ?.find(c => c.userId === userId) ?? null
+    );
   },
 
   saveCart(cart) {
-    const carts = this.getAllCarts();
-    const updated = carts.filter(c => c.userId !== cart.userId);
-    storageService.set(STORAGE_KEYS.CARTS, [...updated, cart]);
+    const carts =
+      storageService.get(STORAGE_KEYS.CARTS)?.filter(
+        c => c.userId !== cart.userId
+      ) ?? [];
+
+    storageService.set(STORAGE_KEYS.CARTS, [...carts, cart]);
   },
 
-  addToCart(userId, product) {
+  async addToCart(userId, product) {
     let cart = this.getUserCart(userId);
 
     if (!cart) {
       cart = {
-        id: crypto.randomUUID(),
         userId,
         items: [],
-        updatedAt: new Date().toISOString(),
+        apiId: null,
       };
     }
 
-    const existingItem = cart.items.find(
-      item => item.productId === product.id
-    );
+    const items = cart.items.some(i => i.productId === product.id)
+      ? cart.items.map(i =>
+          i.productId === product.id
+            ? { ...i, quantity: i.quantity + 1 }
+            : i
+        )
+      : [
+          ...cart.items,
+          {
+            productId: product.id,
+            title: product.title,
+            price: product.price,
+            image: product.image,
+            quantity: 1,
+          },
+        ];
 
-    if (existingItem) {
-      existingItem.quantity += 1;
+    cart = { ...cart, items };
+
+    // ✅ API FIRST
+    if (!cart.apiId) {
+      const res = await cartApiService.createCart(cart);
+      cart.apiId = res.data.id;
     } else {
-      cart.items.push({
-        productId: product.id,
-        title: product.title,
-        price: product.price,
-        image: product.image,
-        quantity: 1,
-      });
+      await cartApiService.updateCart(cart);
     }
 
-    cart.updatedAt = new Date().toISOString();
     this.saveCart(cart);
+    return cart;
+  },
+
+  async updateQuantity(userId, productId, delta) {
+    const cart = this.getUserCart(userId);
+    if (!cart) return null;
+
+    const items = cart.items
+      .map(i =>
+        i.productId === productId
+          ? { ...i, quantity: i.quantity + delta }
+          : i
+      )
+      .filter(i => i.quantity > 0);
+
+    const updatedCart = { ...cart, items };
+
+    await cartApiService.updateCart(updatedCart); // ✅ REAL PUT
+    this.saveCart(updatedCart);
+
+    return updatedCart;
+  },
+
+  async clearCart(userId) {
+    const cart = this.getUserCart(userId);
+    if (!cart || !cart.apiId) return;
+
+    await cartApiService.deleteCart(cart.apiId); // ✅ REAL DELETE
+
+    storageService.set(
+      STORAGE_KEYS.CARTS,
+      storageService
+        .get(STORAGE_KEYS.CARTS)
+        ?.filter(c => c.userId !== userId)
+    );
   },
 };

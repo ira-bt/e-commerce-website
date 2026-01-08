@@ -157,9 +157,11 @@
     cursor: not-allowed;
   }
 }
+
 /* ===========================
    SELECT DROPDOWN
 =========================== */
+
 /* Added select dropdown styles */
 .products__select {
   width: 100%;
@@ -190,9 +192,11 @@
     cursor: not-allowed;
   }
 }
+
 /* ===========================
    PRICE RANGE INPUTS
 =========================== */
+
 /* fixed overflow issue with price inputs and improved flex layout */
 .products__price-inputs {
   display: flex;
@@ -251,6 +255,14 @@
   outline: none;
   appearance: none;
   cursor: pointer;
+  transition: background 0.1s ease;
+
+  &::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 6px;
+    background: transparent;
+    border-radius: 3px;
+  }
 
   &::-webkit-slider-thumb {
     appearance: none;
@@ -261,11 +273,23 @@
     cursor: pointer;
     box-shadow: var(--shadow-sm);
     transition: all 0.2s ease;
+    margin-top: -6px;
 
     &:hover {
       background: var(--color-primary-hover);
       box-shadow: var(--shadow-card);
     }
+  }
+
+  &::-moz-range-track {
+    background: transparent;
+    border: none;
+  }
+
+  &::-moz-range-progress {
+    background: var(--color-primary);
+    border-radius: 3px;
+    height: 6px;
   }
 
   &::-moz-range-thumb {
@@ -284,9 +308,12 @@
     }
   }
 }
+
 /* ===========================
    PRODUCTS GRID CONTROLS
 =========================== */
+
+/* Added controls section for result count */
 .products__controls {
   display: flex;
   justify-content: space-between;
@@ -593,7 +620,6 @@
   background: var(--color-primary);
   color: var(--color-on-primary);
 
-
   &:hover {
     background: var(--color-primary-hover);
   }
@@ -607,9 +633,11 @@
     background: var(--color-border);
   }
 }
+
 /* ===========================
    STATES
 =========================== */
+
 .products__loading,
 .products__error {
   text-align: center;

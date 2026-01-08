@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react"
+"use client"
 
+import { useState, useEffect } from "react"
 
 export default function FiltersPanel({
   searchQuery,
@@ -16,16 +17,36 @@ export default function FiltersPanel({
 }) {
   const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery)
 
-
   useEffect(() => {
     const timer = setTimeout(() => {
       onSearchChange(localSearchQuery)
     }, 300)
 
-
     return () => clearTimeout(timer)
   }, [localSearchQuery, onSearchChange])
 
+  const getSliderBackground = (value, min, max) => {
+    const percent = ((value - min) / (max - min)) * 100
+    return `linear-gradient(to right, var(--color-primary) 0%, var(--color-primary) ${percent}%, var(--color-border) ${percent}%, var(--color-border) 100%)`
+  }
+
+  const handleMinRangeChange = (e) => {
+    const newMin = Math.min(Number.parseInt(e.target.value), priceRange.max)
+    onPriceChange({
+      ...priceRange,
+      min: newMin,
+    })
+    e.target.style.background = getSliderBackground(newMin, priceStats.min, priceStats.max)
+  }
+
+  const handleMaxRangeChange = (e) => {
+    const newMax = Math.max(Number.parseInt(e.target.value), priceRange.min)
+    onPriceChange({
+      ...priceRange,
+      max: newMax,
+    })
+    e.target.style.background = getSliderBackground(newMax, priceStats.min, priceStats.max)
+  }
 
   return (
     <div className={`products__filters ${showFilters ? "active" : ""}`}>
@@ -41,7 +62,6 @@ export default function FiltersPanel({
         />
       </div>
 
-
       {/* Sorting */}
       <div className="products__filter-group">
         <label className="products__filter-label">Sort By</label>
@@ -53,7 +73,6 @@ export default function FiltersPanel({
           <option value="newest">Newest</option>
         </select>
       </div>
-
 
       {/* Category Filter */}
       {categories.length > 0 && (
@@ -73,7 +92,6 @@ export default function FiltersPanel({
           </select>
         </div>
       )}
-
 
       {/* Price Range Filter */}
       <div className="products__filter-group">
@@ -119,12 +137,8 @@ export default function FiltersPanel({
             min={priceStats.min}
             max={priceStats.max}
             value={priceRange.min}
-            onChange={(e) =>
-              onPriceChange({
-                ...priceRange,
-                min: Math.min(Number.parseInt(e.target.value), priceRange.max),
-              })
-            }
+            onChange={handleMinRangeChange}
+            style={{ background: getSliderBackground(priceRange.min, priceStats.min, priceStats.max) }}
           />
           <input
             type="range"
@@ -132,12 +146,8 @@ export default function FiltersPanel({
             min={priceStats.min}
             max={priceStats.max}
             value={priceRange.max}
-            onChange={(e) =>
-              onPriceChange({
-                ...priceRange,
-                max: Math.max(Number.parseInt(e.target.value), priceRange.min),
-              })
-            }
+            onChange={handleMaxRangeChange}
+            style={{ background: getSliderBackground(priceRange.max, priceStats.min, priceStats.max) }}
           />
         </div>
       </div>

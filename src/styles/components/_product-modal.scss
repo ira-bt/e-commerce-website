@@ -1,0 +1,211 @@
+/* Product modal styling with global variables */
+@use "../base/mixins" as *;
+.product-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--space-md);
+  animation: fadeIn 0.2s ease;
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
+.product-modal {
+  /* Use grid layout for image and content side-by-side on desktop, constrain modal height to viewport */
+  background: var(--color-surface);
+  border-radius: 16px;
+  box-shadow: var(--color-lg);
+  width: 90vw;
+  max-width: 900px;
+  max-height: 85vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  position: relative;
+  animation: slideUp 0.3s ease;
+}
+
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+
+.product-modal__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  padding: 4px 8px;
+  z-index: 10;
+  transition: color 0.2s ease;
+
+
+  &:hover {
+    color: var(--color-text);
+  }
+}
+
+
+.product-modal__image-wrapper {
+  /* Grid placement for image - spans 2 rows on desktop, constrain height and use flexbox for centering */
+  grid-column: 1;
+  grid-row: 1 / 3;
+  background: var(--color-background-alt);
+  padding: var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+
+.product-modal__image {
+  /* Constrain image to max-width and max-height to prevent oversizing */
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+
+.product-modal__content {
+  /* Grid placement for content - spans single column, use flexbox for vertical layout */
+  grid-column: 2;
+  grid-row: 1 / 3;
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  overflow-y: auto;
+}
+
+
+.product-modal__title {
+  font-size: var(--font-size-h3);
+  font-weight: 600;
+  margin: 0;
+  color: var(--color-text);
+  line-height: 1.3;
+}
+
+
+.product-modal__category {
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+  margin: 0;
+  text-transform: capitalize;
+}
+
+
+.product-modal__rating {
+  font-size: var(--font-size-small);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+
+.product-modal__price {
+  font-size: var(--font-size-h4);
+  font-weight: 600;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+
+.product-modal__description {
+  font-size: var(--font-size-body);
+  color: var(--color-text);
+  line-height: 1.6;
+  margin: 0;
+  flex-grow: 1;
+}
+
+
+/* Mobile layout - stack image and content vertically */
+@include respond-md {
+  .product-modal {
+    /* Switch to single column layout on mobile */
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+    width: 95vw;
+    max-height: 90vh;
+  }
+
+
+  .product-modal__image-wrapper {
+    /* Image on top, single column, constrain height for mobile */
+    grid-column: 1;
+    grid-row: 1;
+    max-height: 250px;
+    padding: var(--space-md);
+  }
+
+
+  .product-modal__content {
+    /* Content below image, full width on mobile */
+    grid-column: 1;
+    grid-row: 2 / 4;
+    padding: var(--space-lg);
+  }
+
+
+  .product-modal__title {
+    font-size: var(--font-size-h4);
+  }
+}
+
+
+@include respond-sm {
+  .product-modal {
+    /* Further optimize for small screens */
+    width: 100%;
+    max-height: 95vh;
+    border-radius: 12px;
+  }
+
+
+  .product-modal__image-wrapper {
+    max-height: 200px;
+    padding: var(--space-md);
+  }
+
+
+  .product-modal__content {
+    padding: var(--space-md);
+    gap: var(--space-sm);
+  }
+
+
+  .product-modal__title {
+    font-size: var(--font-size-h5);
+  }
+}

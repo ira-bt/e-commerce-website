@@ -10,7 +10,6 @@ export const loginSchema = Yup.object({
     .required(VM.REQUIRED_USERNAME),
 
   password: Yup.string()
-    .matches(REGEX.PASSWORD, VM.INVALID_PASSWORD_FORMAT)
     .required(VM.REQUIRED_PASSWORD),
 });
 

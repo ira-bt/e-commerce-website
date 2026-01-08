@@ -2,14 +2,15 @@
 @use "./base/variables";
 @use "./base/typography";
 @use "./base/reset";
+@use "./base/mixins";
 
 @use "./layout/layout-shell";
 @use "./layout/navbar";
 @use "./layout/footer";
+@use "./layout/snackbar";
 
-@use "./base/mixins";
 @use "./pages/products";
 @use "./pages/auth";
 @use "./pages/cart";
 
-@use "./layout/snackbar"
+@use "./components/product-modal";

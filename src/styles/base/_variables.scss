@@ -24,6 +24,20 @@ $bp-xl: 1280px;
 
   --color-error: #dc2626;
   --color-error-bg: rgba(220, 38, 38, 0.08);
+  --color-error-hover-bg: rgba(220, 38, 38, 0.2); /* Added semi-transparent hover states for edit/delete buttons */
+
+  --color-success: #16a34a;
+  --color-success-bg: rgba(22, 163, 74, 0.08);
+
+  --color-info: #3b82f6;
+  --color-info-bg: rgba(59, 130, 246, 0.08);
+  --color-info-hover-bg: rgba(59, 130, 246, 0.2); /* Added semi-transparent hover states for edit/delete buttons */
+
+  --color-warning: #f59e0b;
+  --color-warning-bg: rgba(245, 158, 11, 0.08);
+
+  /* Added missing color variable for user badge background */
+  --color-user-bg: rgba(107, 114, 128, 0.08);
 
   --color-focus-ring: rgba(37, 99, 235, 0.25);
 

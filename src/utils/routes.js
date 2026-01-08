@@ -8,7 +8,6 @@ export const ROUTES = Object.freeze({
 
   // User (authenticated)
   HOME: "/",            // Products page
-  CHECKOUT: "/checkout",
 
   // Admin
   ADMIN: "/admin",

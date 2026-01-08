@@ -1,4 +1,5 @@
-import { USER_ROLES, ORDER_STATUS } from './enums';
+import { USER_ROLES, ORDER_STATUS } from "./enums"
+import crypto from "crypto"
 
 //Takes a FakeStore API product and converts it into app’s product format.
 export const normalizeProduct = (product) => ({
@@ -11,17 +12,22 @@ export const normalizeProduct = (product) => ({
   rating: product.rating?.rate ?? 0,
   ratingCount: product.rating?.count ?? 0,
   createdAt: new Date().toISOString(),
-});
+})
 
 //Creates a frontend-owned user record.
-export const createUserSchema = (user) => ({
-  id: user.id ?? crypto.randomUUID(),
-  email: user.email,
-  username: user.username,
-  role: user.role ?? USER_ROLES.USER,
-  createdAt: new Date().toISOString(),
-});
+export const createUserSchema = (user, existingUsers = []) => {
+  const maxId =
+    existingUsers.length > 0 ? Math.max(...existingUsers.map((u) => (typeof u.id === "number" ? u.id : 0))) : 0
 
+  return {
+    id: user.id ?? maxId + 1,
+    email: user.email,
+    username: user.username,
+    password: user.password,
+    role: user.role ?? USER_ROLES.USER,
+    createdAt: new Date().toISOString(),
+  }
+}
 
 //Creates a single cart record per user.
 export const createCartSchema = ({ userId, items }) => ({
@@ -29,7 +35,7 @@ export const createCartSchema = ({ userId, items }) => ({
   userId,
   items,
   updatedAt: new Date().toISOString(),
-});
+})
 
 //Creates an order snapshot.
 export const createOrderSchema = ({ userId, items, total }) => ({
@@ -39,4 +45,4 @@ export const createOrderSchema = ({ userId, items, total }) => ({
   total,
   status: ORDER_STATUS.PENDING,
   createdAt: new Date().toISOString(),
-});
+})

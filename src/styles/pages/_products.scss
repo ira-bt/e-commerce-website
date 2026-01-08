@@ -2,7 +2,7 @@
 @use "../base/mixins" as *;
 
 /* ===========================
-   PRODUCTS PAGE
+   PRODUCTS PAGE LAYOUT
 =========================== */
 
 .products {
@@ -30,6 +30,328 @@
   }
 }
 
+/* Added layout for filters sidebar and main content area */
+.products__container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+
+  @include from-md {
+    grid-template-columns: 250px 1fr;
+    gap: var(--space-xl);
+  }
+}
+
+.products__sidebar {
+  position: relative;
+}
+
+.products__main {
+  min-width: 0;
+}
+
+/* ===========================
+   FILTER TOGGLE BUTTON
+=========================== */
+
+/* updated to show filter toggle above container on all mobile screens */
+.products__filter-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--space-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-size: var(--font-size-body);
+  font-weight: 500;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: var(--space-md);
+
+  &:hover {
+    background: var(--color-background-alt);
+    border-color: var(--color-primary);
+  }
+
+  @include from-md {
+    display: none;
+  }
+}
+
+.products__filter-icon {
+  font-size: 1.2rem;
+  margin-left: var(--space-sm);
+}
+
+/* ===========================
+   FILTERS PANEL
+=========================== */
+
+/* updated filters panel to work with new button positioning */
+.products__filters {
+  display: none;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--space-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  margin-top: var(--space-sm);
+  box-shadow: var(--shadow-lg);
+
+  &.active {
+    display: flex;
+  }
+
+  @include from-md {
+    display: flex;
+    position: static;
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-sm);
+    margin-top: 0;
+  }
+}
+
+.products__filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.products__filter-label {
+  font-weight: 600;
+  font-size: var(--font-size-body);
+  color: var(--color-text);
+  text-transform: capitalize;
+}
+
+/* ===========================
+   SEARCH INPUT
+=========================== */
+
+/* Added search input styles */
+.products__search-input {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: var(--font-size-body);
+  font-family: var(--font-family-base);
+  color: var(--color-text);
+  background: var(--color-surface);
+  transition: all 0.2s ease;
+
+  &::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-focus);
+    background: var(--color-surface);
+  }
+
+  &:disabled {
+    background: var(--color-disabled-bg);
+    color: var(--color-disabled-text);
+    cursor: not-allowed;
+  }
+}
+
+/* ===========================
+   SELECT DROPDOWN
+=========================== */
+
+/* Added select dropdown styles */
+.products__select {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: var(--font-size-body);
+  font-family: var(--font-family-base);
+  color: var(--color-text);
+  background: var(--color-surface);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23111827' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-md) center;
+  padding-right: var(--space-xl);
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-focus);
+  }
+
+  &:disabled {
+    background-color: var(--color-disabled-bg);
+    color: var(--color-disabled-text);
+    cursor: not-allowed;
+  }
+}
+
+/* ===========================
+   PRICE RANGE INPUTS
+=========================== */
+
+/* fixed overflow issue with price inputs and improved flex layout */
+.products__price-inputs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+  min-width: 0;
+}
+
+.products__price-input {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: var(--font-size-body);
+  font-family: var(--font-family-base);
+  color: var(--color-text);
+  background: var(--color-surface);
+  transition: all 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-focus);
+  }
+
+  &:disabled {
+    background: var(--color-disabled-bg);
+    color: var(--color-disabled-text);
+    cursor: not-allowed;
+  }
+}
+
+.products__price-separator {
+  color: var(--color-text-muted);
+  font-weight: 600;
+  user-select: none;
+  flex-shrink: 0;
+  padding: 0 var(--space-xs);
+}
+
+.products__price-range {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+/* Added range slider styles */
+.products__range-slider {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-border);
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+  transition: background 0.1s ease;
+  --slider-percent: 0%;
+  background: linear-gradient(
+    to right,
+    var(--color-primary) 0%,
+    var(--color-primary) var(--slider-percent),
+    var(--color-border) var(--slider-percent),
+    var(--color-border) 100%
+  );
+
+  &::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 6px;
+    background: transparent;
+    border-radius: 3px;
+  }
+
+  &::-webkit-slider-thumb {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+    margin-top: -6px;
+
+    &:hover {
+      background: var(--color-primary-hover);
+      box-shadow: var(--shadow-card);
+    }
+  }
+
+  &::-moz-range-track {
+    background: transparent;
+    border: none;
+  }
+
+  &::-moz-range-progress {
+    background: var(--color-primary);
+    border-radius: 3px;
+    height: 6px;
+  }
+
+  &::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    border: none;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: var(--color-primary-hover);
+      box-shadow: var(--shadow-card);
+    }
+  }
+}
+
+/* ===========================
+   PRODUCTS GRID CONTROLS
+=========================== */
+
+/* Added controls section for result count */
+.products__controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.products__info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.products__result-count {
+  font-size: var(--font-size-body);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
 .products__grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -49,6 +371,122 @@
   @include from-lg {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 24px;
+  }
+}
+
+/* ===========================
+   PAGINATION
+=========================== */
+
+/* Added pagination styles */
+.products__pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+  padding: var(--space-lg);
+  flex-wrap: wrap;
+
+  @include respond-md {
+    gap: var(--space-sm);
+  }
+}
+
+.products__pagination-btn {
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border: none;
+  border-radius: 6px;
+  font-size: var(--font-size-body);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) {
+    background: var(--color-primary-hover);
+    box-shadow: var(--shadow-sm);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    background: var(--color-disabled-bg);
+    color: var(--color-disabled-text);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  @include respond-sm {
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--font-size-small);
+  }
+}
+
+.products__page-numbers {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  justify-content: center;
+
+  @include respond-md {
+    gap: var(--space-xs);
+  }
+}
+
+.products__page-number {
+  min-width: 40px;
+  height: 40px;
+  padding: var(--space-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: var(--font-size-body);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  &.active {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    border-color: var(--color-primary);
+  }
+
+  @include respond-sm {
+    min-width: 36px;
+    height: 36px;
+    font-size: var(--font-size-small);
+  }
+}
+
+/* ===========================
+   NO RESULTS STATE
+=========================== */
+
+/* Added no results state styling */
+.products__no-results {
+  text-align: center;
+  padding: 60px var(--space-lg);
+  color: var(--color-text-muted);
+  background: var(--color-background-alt);
+  border-radius: 8px;
+  font-size: var(--font-size-body);
+
+  p {
+    margin: 0;
   }
 }
 

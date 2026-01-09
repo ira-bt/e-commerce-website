@@ -38,7 +38,7 @@
   gap: var(--space-md);
   margin-bottom: var(--space-lg);
   border-bottom: 2px solid var(--color-border);
-  overflow-x: auto;
+  flex-wrap: wrap;
 
   @include respond-sm {
     gap: var(--space-sm);
@@ -468,17 +468,17 @@ textarea.admin-table__input {
 }
 
 .admin-table__actions-cell {
-  display: flex;
-  flex-direction: row;
+  display: flex !important;
+  flex-direction: row !important;
   gap: var(--space-sm);
-  justify-content: center;
+  justify-content: flex-end !important;
 
   @include from-md {
     justify-content: center;
   }
 
   @include respond-sm {
-    justify-content: flex-end;
+    justify-content: flex-end !important;
   }
 
   @include respond-xs {

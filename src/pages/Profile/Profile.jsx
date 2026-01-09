@@ -4,6 +4,7 @@ import { AuthContext } from "../../context/AuthContext"
 import { userService } from "../../services/user.service"
 import axiosInstance from "../../api/axiosInstance" // Import axiosInstance directly for the API call
 import { API_ENDPOINTS } from "../../utils/apiEndpoints"
+import { REGEX } from "../../utils/validations"
 
 export default function Profile() {
   const navigate = useNavigate()
@@ -12,10 +13,12 @@ export default function Profile() {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
+    password: "", // Added password field
   })
   const [originalData, setOriginalData] = useState({
     username: "",
     email: "",
+    password: "", // Added password field
   })
   const [isLoading, setIsLoading] = useState(false)
   const [successMessage, setSuccessMessage] = useState("")
@@ -26,6 +29,7 @@ export default function Profile() {
       const data = {
         username: currentUser.username || "",
         email: currentUser.email || "",
+        password: currentUser.password || "", // Initialize password field
       }
       setFormData(data)
       setOriginalData(data)
@@ -76,9 +80,13 @@ export default function Profile() {
       return false
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(formData.email)) {
+    if (!REGEX.EMAIL.test(formData.email)) {
       setErrorMessage("Please enter a valid email address")
+      return false
+    }
+
+    if (formData.password.trim() && formData.password.length < 6) {
+      setErrorMessage("Password must be at least 6 characters")
       return false
     }
 
@@ -106,6 +114,7 @@ export default function Profile() {
       const updatePayload = {
         username: formData.username.trim(),
         email: formData.email.trim(),
+        ...(formData.password.trim() && { password: formData.password.trim() }), // Include password in API payload only if provided
       }
 
       await axiosInstance.put(API_ENDPOINTS.USERS.SINGLE(currentUser.id), updatePayload)
@@ -113,6 +122,7 @@ export default function Profile() {
       setOriginalData({
         username: formData.username.trim(),
         email: formData.email.trim(),
+        password: formData.password.trim(),
       })
       setEditingFields({})
       setSuccessMessage("Profile updated successfully!")
@@ -216,6 +226,46 @@ export default function Profile() {
                   disabled={isLoading}
                   aria-label="Edit email"
                   title="Edit email"
+                >
+                  ✏️
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Password Field */}
+          <div className="profile__field">
+            <div className="profile__field-label">Password</div>
+            <div className="profile__field-content">
+              {editingFields.password ? (
+                <input
+                  type="password"
+                  className="profile__field-input"
+                  value={formData.password}
+                  onChange={(e) => handleFieldChange("password", e.target.value)}
+                  disabled={isLoading}
+                  autoFocus
+                  placeholder="Leave empty to keep current password"
+                />
+              ) : (
+                <span className="profile__field-value">••••••••</span>
+              )}
+              {editingFields.password ? (
+                <button
+                  className="profile__field-action-btn profile__field-action-btn--cancel"
+                  onClick={() => cancelEditing("password")}
+                  disabled={isLoading}
+                  title="Cancel"
+                >
+                  ✕
+                </button>
+              ) : (
+                <button
+                  className="profile__field-action-btn"
+                  onClick={() => startEditing("password")}
+                  disabled={isLoading}
+                  aria-label="Edit password"
+                  title="Edit password"
                 >
                   ✏️
                 </button>

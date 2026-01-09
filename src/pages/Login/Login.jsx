@@ -1,5 +1,3 @@
-"use client"
-
 import { useFormik } from "formik"
 import { loginApi } from "../../services/auth.service"
 import { useAuth } from "../../hooks/useAuth"

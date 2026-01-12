@@ -36,6 +36,17 @@
   }
 }
 
+/* Added navbar actions container for theme toggle and hamburger */
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+
+  @include respond-md {
+    gap: var(--space-xs);
+  }
+}
+
 /* Menu */
 .navbar__menu {
   display: flex;

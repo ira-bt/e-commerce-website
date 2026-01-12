@@ -5,6 +5,7 @@ import { userService } from "../../services/user.service"
 import axiosInstance from "../../api/axiosInstance" // Import axiosInstance directly for the API call
 import { API_ENDPOINTS } from "../../utils/apiEndpoints"
 import { REGEX } from "../../utils/validations"
+import { VALIDATION_MESSAGES } from "../../utils/validationMessages"
 
 export default function Profile() {
   const navigate = useNavigate()
@@ -65,28 +66,28 @@ export default function Profile() {
 
   const validateFields = () => {
     if (!formData.username.trim()) {
-      setErrorMessage("Username cannot be empty")
+      setErrorMessage(VALIDATION_MESSAGES.USER_EMPTY)
       return false
     }
 
     const existingUser = userService.findByUsername(formData.username.trim())
     if (existingUser && existingUser.id !== currentUser.id) {
-      setErrorMessage("Username already taken")
+      setErrorMessage(VALIDATION_MESSAGES.USER_TAKEN)
       return false
     }
 
     if (!formData.email.trim()) {
-      setErrorMessage("Email cannot be empty")
+      setErrorMessage(VALIDATION_MESSAGES.EMAIL_EMPTY)
+      return false
+    }
+
+    if(!REGEX.PASSWORD.test(formData.password)){
+      setErrorMessage(VALIDATION_MESSAGES.INVALID_PASSWORD_FORMAT)
       return false
     }
 
     if (!REGEX.EMAIL.test(formData.email)) {
-      setErrorMessage("Please enter a valid email address")
-      return false
-    }
-
-    if (formData.password.trim() && formData.password.length < 6) {
-      setErrorMessage("Password must be at least 6 characters")
+      setErrorMessage(VALIDATION_MESSAGES.INVALID_EMAIL)
       return false
     }
 

@@ -3,6 +3,7 @@
 @use "./base/typography";
 @use "./base/reset";
 @use "./base/mixins";
+@use "./base/dark-theme";
 
 @use "./layout/layout-shell";
 @use "./layout/navbar";
@@ -13,5 +14,8 @@
 @use "./pages/auth";
 @use "./pages/cart";
 @use "./pages/admin";
+@use "./pages/profile";
 
 @use "./components/product-modal";
+@use "./components/theme-toggle";
+    

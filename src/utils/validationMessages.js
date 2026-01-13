@@ -15,4 +15,9 @@ export const VALIDATION_MESSAGES = {
   INVALID_CREDENTIALS: "Invalid username or password",
   USERNAME_EXISTS: "Username already exists. Please choose a different one.",
   REGISTRATION_FAILED: "Registration failed",
+
+  //User profile update
+  EMAIL_EMPTY: "email cant be empty ",
+  USER_EMPTY: "Username cannot be empty",
+  USER_TAKEN: "Username already taken",
 };

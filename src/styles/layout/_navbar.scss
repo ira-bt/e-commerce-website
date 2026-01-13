@@ -36,6 +36,17 @@
   }
 }
 
+/* Added navbar actions container for theme toggle and hamburger */
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+
+  @include respond-md {
+    gap: var(--space-xs);
+  }
+}
+
 /* Menu */
 .navbar__menu {
   display: flex;
@@ -44,10 +55,6 @@
 
   @include respond-md {
     gap: var(--space-sm);
-  }
-
-  &.is-admin {
-    background: #e3afaf;
   }
 
   /* MOBILE MENU */
@@ -173,5 +180,22 @@
 
   &:hover {
     background: var(--color-border);
+  }
+}
+
+/* Username display */
+.navbar__username {
+  color: var(--color-text);
+  font-weight: 500;
+  white-space: nowrap;
+  padding: var(--space-sm) var(--space-md);
+
+  @include respond-md {
+    width: 100%;
+    padding: var(--space-sm) 0;
+  }
+
+  &--admin {
+    color: var(--color-text);
   }
 }

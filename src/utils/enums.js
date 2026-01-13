@@ -13,8 +13,8 @@ export const STORAGE_KEYS = Object.freeze({
   AUTH: 'fs_auth',
 });
 
-export const ORDER_STATUS = Object.freeze({
-  PENDING: 'pending',
-  COMPLETED: 'completed',
-  CANCELLED: 'cancelled',
-});
+// export const ORDER_STATUS = Object.freeze({
+//   PENDING: 'pending',
+//   COMPLETED: 'completed',
+//   CANCELLED: 'cancelled',
+// });

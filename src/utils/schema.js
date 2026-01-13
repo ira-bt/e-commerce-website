@@ -1,5 +1,5 @@
-import { USER_ROLES, ORDER_STATUS } from "./enums"
-import crypto from "crypto"
+import { USER_ROLES} from "./enums"
+// import crypto from "crypto"
 
 //Takes a FakeStore API product and converts it into app’s product format.
 export const normalizeProduct = (product) => ({
@@ -30,19 +30,19 @@ export const createUserSchema = (user, existingUsers = []) => {
 }
 
 //Creates a single cart record per user.
-export const createCartSchema = ({ userId, items }) => ({
-  id: crypto.randomUUID(),
-  userId,
-  items,
-  updatedAt: new Date().toISOString(),
-})
+// export const createCartSchema = ({ userId, items }) => ({
+//   id: crypto.randomUUID(),
+//   userId,
+//   items,
+//   updatedAt: new Date().toISOString(),
+// })
 
-//Creates an order snapshot.
-export const createOrderSchema = ({ userId, items, total }) => ({
-  id: crypto.randomUUID(),
-  userId,
-  items,
-  total,
-  status: ORDER_STATUS.PENDING,
-  createdAt: new Date().toISOString(),
-})
+// //Creates an order snapshot.
+// export const createOrderSchema = ({ userId, items, total }) => ({
+//   id: crypto.randomUUID(),
+//   userId,
+//   items,
+//   total,
+//   status: ORDER_STATUS.PENDING,
+//   createdAt: new Date().toISOString(),
+// })

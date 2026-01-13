@@ -81,7 +81,7 @@ export default function AdminUsersTable() {
                   <tr key={user.id}>
                     <td>{user.id}</td>
                     <td className="admin-table__cell-title">{user.username}</td>
-                    <td>{user.email}</td>
+                    <td className="admin-table__cell-email">{user.email}</td>
                     <td>
                       <span className={`admin-table__badge admin-table__badge--${user.role?.toLowerCase()}`}>
                         {user.role}

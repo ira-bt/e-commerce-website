@@ -1,0 +1,36 @@
+// Dark theme color overrides
+[data-theme='dark'] {
+  --color-primary: #ff3d94;
+  --color-primary-hover: #ff1e7e;
+  --color-bg: #0f172a;
+  --color-text: #f3f4f6;
+  --color-text-secondary: #111827;
+  --color-text-muted: #9ca3af;
+  --color-muted: #9ca3af;
+  --color-border: #334155;
+  --color-background-alt: #1e293b;
+
+  --color-error: #fca5a5;
+  --color-error-bg: rgba(252, 165, 165, 0.12);
+  --color-error-hover-bg: rgba(252, 165, 165, 0.25);
+
+  --color-success: #86efac;
+  --color-success-bg: rgba(134, 239, 172, 0.12);
+
+  --color-info: #93c5fd;
+  --color-info-bg: rgba(147, 197, 253, 0.12);
+  --color-info-hover-bg: rgba(147, 197, 253, 0.25);
+
+  --color-warning: #fbbf24;
+  --color-warning-bg: rgba(251, 191, 36, 0.12);
+
+  --color-user-bg: rgba(148, 163, 184, 0.12);
+
+  --color-surface: #1a202c;
+  --color-on-primary: #111827;
+
+  --shadow-focus: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+}

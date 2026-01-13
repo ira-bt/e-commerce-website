@@ -1,50 +1,46 @@
-// src/layout/Navbar.jsx
-import { NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
-import { USER_ROLES } from "../utils/enums";
-import { ROUTES } from "../utils/routes";
-import { useState } from "react";
-import clsx from "classnames";
+import { NavLink, useNavigate } from "react-router-dom"
+import { useAuth } from "../hooks/useAuth"
+import { USER_ROLES } from "../utils/enums"
+import { ROUTES } from "../utils/routes"
+import { useState } from "react"
+import clsx from "classnames"
+import ThemeToggle from "../components/ThemeToggle"
 
 export default function Navbar() {
-  const { isAuthenticated, role, logout } = useAuth();
-  const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
+  const { isAuthenticated, role, user, logout } = useAuth()
+  const navigate = useNavigate()
+  const [open, setOpen] = useState(false)
 
   const handleLogout = () => {
-    logout();
-    closeMenu();
-    navigate(ROUTES.HOME, { replace: true });
-  };
+    logout()
+    closeMenu()
+    navigate(ROUTES.HOME, { replace: true })
+  }
 
-  const closeMenu = () => setOpen(false);
+  const closeMenu = () => setOpen(false)
 
   return (
     <header className="navbar">
       <div className="navbar__container">
         {/* Logo */}
-        <div
-          className="navbar__logo"
-          onClick={() => navigate(ROUTES.HOME)}
-        >
+        <div className="navbar__logo" onClick={() => navigate(ROUTES.HOME)}>
           FakeStore
         </div>
-
-        {/* Hamburger */}
-        <button
-          className="navbar__toggle"
-          onClick={() => setOpen(!open)}
-        >
-          ☰
-        </button>
-
+         
+        <div className="navbar__actions">
+          <ThemeToggle />
+          <button className="navbar__toggle" onClick={() => setOpen(!open)}>
+            ☰
+          </button>
+        </div>
+        
         {/* Links */}
         <nav
           className={clsx("navbar__menu", {
             "is-open": open,
             "is-admin": isAuthenticated && role === USER_ROLES.ADMIN,
           })}
-        >
+        > 
           {/* GUEST */}
           {!isAuthenticated && (
             <>
@@ -52,7 +48,11 @@ export default function Navbar() {
                 Login
               </NavLink>
 
-              <NavLink to={ROUTES.REGISTER} className="navbar__link navbar__link--button navbar__link--secondary" onClick={closeMenu}>
+              <NavLink
+                to={ROUTES.REGISTER}
+                className="navbar__link navbar__link--button navbar__link--secondary"
+                onClick={closeMenu}
+              >
                 Register
               </NavLink>
             </>
@@ -67,6 +67,7 @@ export default function Navbar() {
               <NavLink to={ROUTES.PROFILE} onClick={closeMenu}>
                 Profile
               </NavLink>
+              <span className="navbar__username">{user?.username}</span>
               <button onClick={handleLogout}>Logout</button>
             </>
           )}
@@ -77,11 +78,12 @@ export default function Navbar() {
               <NavLink to={ROUTES.ADMIN} onClick={closeMenu}>
                 Admin
               </NavLink>
+              <span className="navbar__username navbar__username--admin">{user?.username}</span>
               <button onClick={handleLogout}>Logout</button>
             </>
           )}
         </nav>
       </div>
     </header>
-  );
+  )
 }

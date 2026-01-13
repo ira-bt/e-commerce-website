@@ -1,17 +1,16 @@
-import { useFormik } from "formik";
-import { loginApi } from "../../services/auth.service";
-import { useAuth } from "../../hooks/useAuth";
-import { useNavigate, Link } from "react-router-dom";
-import { ROUTES } from "../../utils/routes";
-import InputField from "../../components/form/InputField";
-import { userService } from "../../services/user.service";
-import { REGEX } from "../../utils/validations";
-import { VALIDATION_MESSAGES as VM } from "../../utils/validationMessages";
-import { loginSchema } from "../../utils/validationSchemas";
+import { useFormik } from "formik"
+import { loginApi } from "../../services/auth.service"
+import { useAuth } from "../../hooks/useAuth"
+import { useNavigate, Link } from "react-router-dom"
+import { ROUTES } from "../../utils/routes"
+import InputField from "../../components/form/InputField"
+import { userService } from "../../services/user.service"
+import { VALIDATION_MESSAGES as VM } from "../../utils/validationMessages"
+import { loginSchema } from "../../utils/validationSchemas"
 
 export default function Login() {
-  const { login } = useAuth();
-  const navigate = useNavigate();
+  const { login } = useAuth()
+  const navigate = useNavigate()
 
   const formik = useFormik({
     initialValues: {
@@ -25,59 +24,81 @@ export default function Login() {
         /**
          * 1️⃣ Try LOCAL login first
          */
-        const localUser = userService.findByUsername(values.username);
+        const localUser = userService.findByUsername(values.username)
 
         if (localUser && localUser.password === values.password) {
           login({
+            id: localUser.id,
             username: localUser.username,
             email: localUser.email,
             role: localUser.role,
             token: crypto.randomUUID(),
-          });
+          })
 
-          navigate(ROUTES.HOME);
-          return;
+          navigate(ROUTES.HOME)
+          return
         }
 
         /**
          * 2️⃣ Fallback to FakeStore API
          */
-        const { token } = await loginApi(values);
+        const { token } = await loginApi(values)
 
-        login({
-          username: values.username,
-          token,
-        });
+        await userService.bootstrapUsers()
+        const apiUser = userService.findByUsername(values.username)
 
-        navigate(ROUTES.HOME);
+        if (apiUser) {
+          login({
+            id: apiUser.id,
+            username: apiUser.username,
+            email: apiUser.email,
+            role: apiUser.role,
+            token,
+          })
+        } else {
+          // If user not found in localStorage after bootstrap, create a minimal user object
+          login({
+            username: values.username,
+            email: values.username + "@example.com",
+            role: "user",
+            token,
+          })
+        }
+
+        navigate(ROUTES.HOME)
       } catch {
-        setStatus(VM.INVALID_CREDENTIALS);
+        setStatus(VM.INVALID_CREDENTIALS)
       } finally {
-        setSubmitting(false);
+        setSubmitting(false)
       }
     },
-
-  });
+  })
 
   return (
     <form onSubmit={formik.handleSubmit} className="auth-form">
       <h2>Login</h2>
-      <InputField {...formik.getFieldProps("username")} label="Username"
-        error={formik.errors.username} touched={formik.touched.username} />
+      <InputField
+        {...formik.getFieldProps("username")}
+        label="Username"
+        error={formik.errors.username}
+        touched={formik.touched.username}
+      />
 
-      <InputField {...formik.getFieldProps("password")} label="Password" type="password"
-        error={formik.errors.password} touched={formik.touched.password} />
+      <InputField
+        {...formik.getFieldProps("password")}
+        label="Password"
+        type="password"
+        error={formik.errors.password}
+        touched={formik.touched.password}
+      />
 
       {formik.status && <p className="form-error">{formik.status}</p>}
 
-      <button disabled={!formik.isValid || formik.isSubmitting}>
-        Login
-      </button>
+      <button disabled={!formik.isValid || formik.isSubmitting}>Login</button>
 
       <p className="auth-form__switch">
         Don&apos;t have an account? <Link to={ROUTES.REGISTER}>Register</Link>
       </p>
-
     </form>
-  );
+  )
 }

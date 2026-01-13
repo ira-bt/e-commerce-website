@@ -38,6 +38,11 @@
   gap: var(--space-md);
   margin-bottom: var(--space-lg);
   border-bottom: 2px solid var(--color-border);
+  flex-wrap: wrap;
+
+  @include respond-sm {
+    gap: var(--space-sm);
+  }
 }
 
 .admin-panel__tab {
@@ -52,6 +57,12 @@
   transition: all 0.2s ease;
   position: relative;
   bottom: -2px;
+  white-space: nowrap;
+
+  @include respond-sm {
+    padding: var(--space-md) var(--space-md);
+    font-size: var(--font-size-small);
+  }
 
   &:hover {
     color: var(--color-primary);
@@ -72,6 +83,11 @@
 
   @include respond-sm {
     padding: var(--space-md);
+    border-radius: 6px;
+  }
+
+  @include respond-xs {
+    padding: var(--space-sm);
   }
 }
 
@@ -87,6 +103,14 @@
     font-size: var(--font-size-h3);
     color: var(--color-text);
     margin: 0;
+
+    @include respond-sm {
+      font-size: var(--font-size-h4);
+    }
+  }
+
+  @include respond-sm {
+    margin-bottom: var(--space-md);
   }
 }
 
@@ -96,6 +120,11 @@
   background-color: var(--color-background-alt);
   padding: var(--space-sm) var(--space-md);
   border-radius: 4px;
+
+  @include respond-sm {
+    font-size: 0.75rem;
+    padding: var(--space-xs) var(--space-sm);
+  }
 }
 
 .admin-table__btn {
@@ -106,6 +135,12 @@
   font-size: var(--font-size-body);
   font-weight: 500;
   transition: all 0.2s ease;
+  white-space: nowrap;
+
+  @include respond-sm {
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--font-size-small);
+  }
 
   &:disabled {
     opacity: 0.6;
@@ -148,10 +183,20 @@
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: var(--space-lg);
 
+  @include respond-md {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md);
+  }
+
   @include respond-sm {
     grid-template-columns: 1fr;
     padding: var(--space-md);
     gap: var(--space-md);
+  }
+
+  @include respond-xs {
+    padding: var(--space-sm);
+    gap: var(--space-sm);
   }
 }
 
@@ -164,6 +209,10 @@
     color: var(--color-text);
     margin-bottom: var(--space-sm);
     font-weight: 500;
+
+    @include respond-sm {
+      font-size: 0.8125rem;
+    }
   }
 }
 
@@ -181,6 +230,11 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   font-family: var(--font-family-base);
 
+  @include respond-sm {
+    font-size: var(--font-size-small);
+    padding: var(--space-sm) var(--space-sm);
+  }
+
   &:focus {
     outline: none;
     border-color: var(--color-primary);
@@ -197,6 +251,10 @@ textarea.admin-table__input {
   resize: vertical;
   font-family: var(--font-family-base);
   min-height: 100px;
+
+  @include respond-sm {
+    min-height: 80px;
+  }
 }
 
 .admin-table__form-actions {
@@ -207,6 +265,7 @@ textarea.admin-table__input {
 
   @include respond-sm {
     flex-direction: column-reverse;
+    gap: var(--space-sm);
   }
 }
 
@@ -215,6 +274,11 @@ textarea.admin-table__input {
   overflow-x: auto;
   border: 1px solid var(--color-border);
   border-radius: 6px;
+  -webkit-overflow-scrolling: touch;
+
+  @include respond-sm {
+    border-radius: 4px;
+  }
 }
 
 .admin-table__loading {
@@ -222,6 +286,11 @@ textarea.admin-table__input {
   text-align: center;
   color: var(--color-text-muted);
   font-size: var(--font-size-body);
+
+  @include respond-sm {
+    padding: var(--space-lg);
+    font-size: var(--font-size-small);
+  }
 }
 
 .admin-table__table {
@@ -229,9 +298,22 @@ textarea.admin-table__input {
   border-collapse: collapse;
   font-size: var(--font-size-body);
 
+  @include respond-sm {
+    font-size: var(--font-size-small);
+  }
+
+  @include respond-xs {
+    font-size: 0.75rem;
+  }
+
   thead {
     background-color: var(--color-background-alt);
     border-bottom: 2px solid var(--color-border);
+    display: none;
+
+    @include from-md {
+      display: table-header-group;
+    }
   }
 
   th {
@@ -239,23 +321,94 @@ textarea.admin-table__input {
     text-align: left;
     font-weight: 600;
     color: var(--color-text);
+
+    @include respond-sm {
+      padding: var(--space-sm);
+    }
   }
 
   td {
     padding: var(--space-md);
     border-bottom: 1px solid var(--color-border);
     color: var(--color-text);
+
+    @include respond-sm {
+      padding: var(--space-sm);
+    }
+
+    @include respond-xs {
+      padding: var(--space-xs) var(--space-sm);
+    }
+  }
+
+  tbody {
+    display: block;
+
+    @include from-md {
+      display: table-row-group;
+    }
   }
 
   tbody tr {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+    padding: var(--space-md);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
     transition: background-color 0.2s ease;
 
-    &:hover {
-      background-color: var(--color-background-alt);
+    @include from-md {
+      display: table-row;
+      margin-bottom: 0;
+      padding: 0;
+      background-color: transparent;
+      border: none;
+      border-radius: 0;
+
+      &:hover {
+        background-color: var(--color-background-alt);
+      }
+
+      &:last-child td {
+        border-bottom: none;
+      }
     }
 
-    &:last-child td {
-      border-bottom: none;
+    @include respond-sm {
+      margin-bottom: var(--space-sm);
+      padding: var(--space-sm);
+    }
+  }
+
+  tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+
+    @include from-md {
+      display: table-cell;
+      justify-content: unset;
+      align-items: unset;
+    }
+
+    &::before {
+      content: attr(data-label);
+      font-weight: 600;
+      color: var(--color-text);
+      flex: 0 0 40%;
+      min-width: 100px;
+
+      @include from-md {
+        content: unset;
+        font-weight: unset;
+        flex: unset;
+        min-width: unset;
+      }
     }
   }
 }
@@ -265,11 +418,37 @@ textarea.admin-table__input {
   color: var(--color-text-muted);
   padding: var(--space-xl) !important;
   font-style: italic;
+
+  @include respond-sm {
+    padding: var(--space-lg) !important;
+    font-size: var(--font-size-small);
+  }
 }
 
 .admin-table__cell-title {
   max-width: 300px;
   word-break: break-word;
+
+  @include respond-sm {
+    max-width: none;
+  }
+}
+
+.admin-table__cell-email {
+  word-break: break-all;
+  font-size: var(--font-size-small);
+  overflow-wrap: break-word;
+  max-width: 250px;
+
+  @include respond-sm {
+    max-width: 180px;
+    font-size: 0.75rem;
+  }
+
+  @include respond-xs {
+    max-width: 130px;
+    font-size: 0.7rem;
+  }
 }
 
 .admin-table__cell-price {
@@ -281,12 +460,30 @@ textarea.admin-table__input {
 .admin-table__actions-col {
   width: 100px;
   text-align: center;
+
+  @include respond-sm {
+    width: auto;
+    text-align: right;
+  }
 }
 
 .admin-table__actions-cell {
-  display: flex;
+  display: flex !important;
+  flex-direction: row !important;
   gap: var(--space-sm);
-  justify-content: center;
+  justify-content: flex-end !important;
+
+  @include from-md {
+    justify-content: center;
+  }
+
+  @include respond-sm {
+    justify-content: flex-end !important;
+  }
+
+  @include respond-xs {
+    gap: var(--space-xs);
+  }
 }
 
 .admin-table__action-btn {
@@ -302,6 +499,19 @@ textarea.admin-table__input {
   justify-content: center;
   width: 36px;
   height: 36px;
+  flex-shrink: 0;
+
+  @include respond-sm {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+
+  @include respond-xs {
+    width: 28px;
+    height: 28px;
+    font-size: 0.9rem;
+  }
 
   &:focus {
     outline: none;
@@ -342,6 +552,12 @@ textarea.admin-table__input {
   font-size: var(--font-size-small);
   font-weight: 600;
   text-transform: uppercase;
+  white-space: nowrap;
+
+  @include respond-sm {
+    font-size: 0.75rem;
+    padding: var(--space-xs) var(--space-xs);
+  }
 }
 
 .admin-table__badge--admin {
